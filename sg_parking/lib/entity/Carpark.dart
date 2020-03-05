@@ -1,66 +1,99 @@
-class Carpark {
-  String ts;
-//  final List<CarparkData> cpd;
+class Response {
+  List<Items> items;
 
-//  Carpark({this.ts, this.cpd});
+  Response({this.items});
 
-//  factory Carpark.fromJson(List<dynamic> parsedJson) {
-////
-////    List<CarparkData> cpl = new List<CarparkData>();
-////    cpl = parsedJson.map((i)=>CarparkData.fromJson(i)).toList();
-//
-//    return new Carpark(
-//        ts: parsedJson[0],
-////        cpd: cpl
-//    );
-//  }
-  Carpark({this.ts});
-  Carpark.fromJson(Map<String, dynamic> jsonMap) {
-    this.ts = (jsonMap['items']);
+  Response.fromJson(Map<String, dynamic> json) {
+    if (json['items'] != null) {
+      items = new List<Items>();
+      json['items'].forEach((v) {
+        items.add(new Items.fromJson(v));
+      });
+    }
+  }
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.items != null) {
+      data['items'] = this.items.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
-//
-//class CarparkData{
-//  final List<CarparkInfo> carparkInfo;
-//  final String carparkNo;
-//  final String updateDateTime;
-//
-//
-//  CarparkData({
-//    this.carparkInfo,
-//    this.carparkNo,
-//    this.updateDateTime
-//  });
-//
-//  factory CarparkData.fromJson(List<dynamic> parsedJson) {
-//
-//    List<CarparkInfo> carparkList = new List<CarparkInfo>();
-//    carparkList = parsedJson.map((i)=>CarparkInfo.fromJson(i)).toList();
-//
-//    return new CarparkData(
-//        carparkInfo: carparkList,
-//        carparkNo: parsedJson[2],
-//        updateDateTime: parsedJson[3]
-//    );
-//  }
-//}
-//
-//
-//
-//class CarparkInfo{
-//  final String totalLots;
-//  final String lotType;
-//  final String lotsAvailable;
-//
-//  CarparkInfo({this.totalLots, this.lotType, this.lotsAvailable});
-//
-//  factory CarparkInfo.fromJson(Map<String, dynamic> parsedJson){
-//    return CarparkInfo(
-//        totalLots:parsedJson['total_lots'],
-//        lotType:parsedJson['lot_type'],
-//        lotsAvailable:parsedJson['lots_available']
-//    );
-//  }
-//}
+class Items {
+  String timestamp;
+  List<CarparkData> carparkData;
+
+  Items({this.timestamp, this.carparkData});
+
+  Items.fromJson(Map<String, dynamic> json) {
+    timestamp = json['timestamp'];
+    if (json['carpark_data'] != null) {
+      carparkData = new List<CarparkData>();
+      json['carpark_data'].forEach((v) {
+        carparkData.add(new CarparkData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['timestamp'] = this.timestamp;
+    if (this.carparkData != null) {
+      data['carpark_data'] = this.carparkData.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class CarparkData {
+  List<CarparkInfo> carparkInfo;
+  String carparkNumber;
+  String updateDatetime;
+
+  CarparkData({this.carparkInfo, this.carparkNumber, this.updateDatetime});
+
+  CarparkData.fromJson(Map<String, dynamic> json) {
+    if (json['carpark_info'] != null) {
+      carparkInfo = new List<CarparkInfo>();
+      json['carpark_info'].forEach((v) {
+        carparkInfo.add(new CarparkInfo.fromJson(v));
+      });
+    }
+    carparkNumber = json['carpark_number'];
+    updateDatetime = json['update_datetime'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.carparkInfo != null) {
+      data['carpark_info'] = this.carparkInfo.map((v) => v.toJson()).toList();
+    }
+    data['carpark_number'] = this.carparkNumber;
+    data['update_datetime'] = this.updateDatetime;
+    return data;
+  }
+}
+
+class CarparkInfo {
+  String totalLots;
+  String lotType;
+  String lotsAvailable;
+
+  CarparkInfo({this.totalLots, this.lotType, this.lotsAvailable});
+
+  CarparkInfo.fromJson(Map<String, dynamic> json) {
+    totalLots = json['total_lots'];
+    lotType = json['lot_type'];
+    lotsAvailable = json['lots_available'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['total_lots'] = this.totalLots;
+    data['lot_type'] = this.lotType;
+    data['lots_available'] = this.lotsAvailable;
+    return data;
+  }
+}

@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(12.0),
           child: _currentPage,
         ),
       ),

@@ -1,92 +1,70 @@
+import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:sgparking/entity/Carpark.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+Future<Response> fetchResponse() async {
+  final response =
+  await http.get('https://api.data.gov.sg/v1/transport/carpark-availability');
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response, then parse the JSON.
+    return Response.fromJson(json.decode(response.body));
+  } else {
+    // If the server did not return a 200 OK response, then throw an exception.
+    throw Exception('Failed to load album');
+  }
+}
+
 
 void main() => runApp(App());
 
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
+class App extends StatefulWidget {
+  App({Key key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MyAppState extends State<App> {
+  Future<Response> futureResponse;
 
-  List<Carpark> _notes = List<Carpark>();
 
-  Future<List<Carpark>> fetchNotes() async {
-    var url = 'https://api.data.gov.sg/v1/transport/carpark-availability';
-    var response = await http.get(url);
-
-    var notes = List<Carpark>();
-
-    if (response.statusCode == 200) {
-      var notesJson = json.decode(response.body);
-      for (var noteJson in notesJson) {
-        notes.add(Carpark.fromJson(noteJson));
-      }
-    }
-    return notes;
-  }
 
   @override
   void initState() {
-    fetchNotes().then((value) {
-      setState(() {
-        _notes.addAll(value);
-      });
-    });
     super.initState();
+    futureResponse = fetchResponse();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+      title: 'Fetch Data Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
         appBar: AppBar(
           title: Text('Carpark Search'),
         ),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            return Card(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 32.0, bottom: 32.0, left: 16.0, right: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      _notes[index].ts,
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    Text(
-                      _notes[index].ts,
-                      style: TextStyle(
-                          color: Colors.grey.shade600
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-          itemCount: _notes.length,
-        )
+        body: Center(
+          child: FutureBuilder<Response>(
+            future: futureResponse,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data.items[0].carparkData[0].carparkInfo[0].totalLots);
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+
+              // By default, show a loading spinner.
+              return CircularProgressIndicator();
+            },
+          ),
+        ),
+      ),
     );
   }
 }
