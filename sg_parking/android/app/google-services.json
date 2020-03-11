@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "314573233762",
+    "firebase_url": "https://noturningbac-770b6.firebaseio.com",
+    "project_id": "noturningbac-770b6",
+    "storage_bucket": "noturningbac-770b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314573233762:android:71ddbe761f7bbf1fdffb3b",
+        "android_client_info": {
+          "package_name": "com.example.sgparking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314573233762-63t4tqc70vmh4g3jh0f0rrivke4isssi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-f2WNYqDUM9PQWOVQYdCeYoflvO2wkZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "314573233762-63t4tqc70vmh4g3jh0f0rrivke4isssi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
