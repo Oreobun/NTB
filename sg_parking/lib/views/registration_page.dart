@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sgparking/views/EmailVerificationPage.dart';
+import 'package:sgparking/views/email_verification_page.dart';
 import 'home.dart';
 
 class RegistrationPage extends StatefulWidget {

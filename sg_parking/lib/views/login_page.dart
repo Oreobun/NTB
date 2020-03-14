@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sgparking/views/RegistrationPage.dart';
+import 'package:sgparking/views/registration_page.dart';
 import 'home.dart';
 
 class LoginPage extends StatefulWidget {
