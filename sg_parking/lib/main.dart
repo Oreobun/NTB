@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sgparking/control/Login.dart';
 import 'views/home.dart';
 import 'views/LoginPage.dart';
+import 'views/RegistrationPage.dart';
+import 'views/EmailVerificationPage.dart';
 
 void main() => runApp(MyApp());
 
