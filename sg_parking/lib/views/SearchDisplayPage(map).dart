@@ -3,22 +3,8 @@ import 'dart:convert';
 import 'package:sgparking/entity/Carpark.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-//void main() => runApp(App());
-//
-//class App extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      title: 'Flutter Demo',
-//      theme: ThemeData(
-//        primarySwatch: Colors.blue,
-//      ),
-//      home: HomePage(),
-//    );
-//  }
-//}
-
+import 'ReportPage.dart';
+import 'SortPage.dart';
 class SearchMap extends StatefulWidget {
 
   @override
@@ -26,12 +12,11 @@ class SearchMap extends StatefulWidget {
 }
 
 class _HomePageState extends State<SearchMap> {
-
+  String _howAreYou = '...';
   List<CarparkInfo> _notes = List<CarparkInfo>();
   List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
 
   Future<List<CarparkInfo>> fetchNotes() async {
-    print("test test");
     var url = 'https://api.data.gov.sg/v1/transport/carpark-availability';
     var response = await http.get(url);
 
@@ -40,15 +25,76 @@ class _HomePageState extends State<SearchMap> {
     if (response.statusCode == 200) {
       print("test test");
       var notesJson = json.decode(response.body);
-      var a = notesJson.items[0].carparkData;
-      int counter = notesJson.items[0].carparkData.length;
+      var test = Response.fromJson(notesJson);
       print("test test");
-      for (var noteJson in a) {
-        notes.add(CarparkInfo.fromJson(noteJson));
+      var ha = test.items[0];
+      for (var noteJson in ha.carparkData) {
+        notes.add(noteJson.carparkInfo[0]);
       }
+      print(notes.length);
+      Comparator<CarparkInfo> lotsComparator = (a,b) => int.parse(a.totalLots).compareTo(int.parse(b.totalLots));
+      notes.sort(lotsComparator);
     }
     return notes;
   }
+
+  void _openReportPage({BuildContext context, bool fullscreenDialog = false}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: fullscreenDialog,
+        builder: (context) => Report(),
+      ),
+    );
+    // Navigator.pushNamed(context, '/about');
+  }
+
+
+  void _openPageSort(
+      {BuildContext context, bool fullscreenDialog = false}) async {
+    final String _gratitudeResponse = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: fullscreenDialog,
+        builder: (context) => Sort(
+          radioGroupValue: -1,
+        ),
+      ),
+    );
+    _howAreYou = _gratitudeResponse ?? '';
+  }
+
+  /* alert dialog pop out */
+//
+//  Future<void> _neverSatisfied() async {
+//    return showDialog<void>(
+//      context: context,
+//      barrierDismissible: false, // user must tap button!
+//      builder: (BuildContext context) {
+//        return AlertDialog(
+//          title: Text('Rewind and remember'),
+//          content: SingleChildScrollView(
+//            child: ListBody(
+//              children: <Widget>[
+//                Text('You will never be satisfied.'),
+//                Text('You\’re like me. I’m never satisfied.'),
+//              ],
+//            ),
+//          ),
+//          actions: <Widget>[
+//            FlatButton(
+//              child: Text('Regret'),
+//              onPressed: () {
+//                Navigator.of(context).pop();
+//              },
+//            ),
+//          ],
+//        );
+//      },
+//    );
+//  }
+
+
 
   @override
   void initState() {
@@ -65,7 +111,16 @@ class _HomePageState extends State<SearchMap> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Flutter listview with json'),
+          title: Text('Carpark Search'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.report),
+              onPressed: () => _openReportPage(
+                context: context,
+                fullscreenDialog: true,
+              ),
+            ),
+          ],
         ),
         body: ListView.builder(
           itemBuilder: (context, index) {
@@ -78,20 +133,38 @@ class _HomePageState extends State<SearchMap> {
 
   _searchBar() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: InputDecoration(
-            hintText: 'Search...'
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        child: TextField(
+          decoration: InputDecoration(
+              hintText: 'Search...',
+              suffixText: 'sort',
+              suffixIcon: IconButton(
+              onPressed: () => _openPageSort(
+                context: context,
+                fullscreenDialog: false,
+              ),
+              icon: Icon(Icons.sort),
+            ),
+              prefixText: 'filter             ',
+              prefixIcon: IconButton(
+              icon: Icon(Icons.filter_list),
+
+
+            ),
+          ),
+          onChanged: (text) {
+            text = text.toLowerCase();
+            setState(() {
+              _notesForDisplay = _notes.where((note) {
+                var note2 = note.totalLots.toString();
+                var noteTitle = note2.toLowerCase();
+                return noteTitle.contains(text);
+              }).toList();
+            });
+          },
         ),
-        onChanged: (text) {
-          text = text.toLowerCase();
-          setState(() {
-            _notesForDisplay = _notes.where((note) {
-              var noteTitle = note.totalLots.toLowerCase();
-              return noteTitle.contains(text);
-            }).toList();
-          });
-        },
+
       ),
     );
   }
@@ -104,16 +177,23 @@ class _HomePageState extends State<SearchMap> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              _notesForDisplay[index].totalLots,
+             'Total lots = ' + _notesForDisplay[index].totalLots,
               style: TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey.shade900
               ),
             ),
             Text(
-              _notesForDisplay[index].lotsAvailable,
+              'Lots available = ' + _notesForDisplay[index].lotsAvailable,
               style: TextStyle(
-                  color: Colors.grey.shade600
+                  color: Colors.grey.shade800
+              ),
+            ),
+            Text(
+              'Lot type = ' + _notesForDisplay[index].lotType,
+              style: TextStyle(
+                  color: Colors.grey.shade800
               ),
             ),
           ],
