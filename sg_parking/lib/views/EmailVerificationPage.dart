@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:sgparking/views/EmailVerificationPage.dart';
 import 'home.dart';
 
-class RegistrationPage extends StatefulWidget {
+class EmailVerificationPage extends StatefulWidget {
   @override
-  _RegistrationPageState createState() => _RegistrationPageState();
+  _EmailVerificationPage createState() => _EmailVerificationPage();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _EmailVerificationPage extends State<EmailVerificationPage> {
   // To adjust the layout according to the screen size
   // so that our layout remains responsive ,we need to
   // calculate the screen height
   double screenHeight;
   final myController = TextEditingController();
-  final myController2 = TextEditingController();
-  final myController3 = TextEditingController();
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     myController.dispose();
-    myController2.dispose();
-    myController3.dispose();
     super.dispose();
   }
 
@@ -83,7 +78,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Create Account",
+                      "Email Verification",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 28,
@@ -92,43 +87,36 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 20,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "A verification code has been sent to your email.",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                   TextFormField(
                     controller: myController,
                     decoration: InputDecoration(
-                        labelText: "Enter Email", hasFloatingPlaceholder: true),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: myController2,
-                    decoration: InputDecoration(
-                        labelText: "Enter Password", hasFloatingPlaceholder: true),
-                    obscureText: true,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: myController3,
-                    decoration: InputDecoration(
-                        labelText: "Re-enter Password", hasFloatingPlaceholder: true),
-                    obscureText: true,
+                        labelText: "Enter Verification Code", hasFloatingPlaceholder: true),
                   ),
                   SizedBox(
                     height: 30,
                   ),
                   FlatButton(
-                      child: Text("Create"),
+                      child: Text("Verify"),
                       color: Color(0xFF4B9DFE),
                       textColor: Colors.white,
                       padding: EdgeInsets.only(
                           left: 38, right: 38, top: 15, bottom: 15),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),
-                      onPressed: createAccountClicked
+                      onPressed: verifyClicked
                   )
                 ],
               ),
@@ -140,18 +128,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  void createAccountClicked() {
-    String email = myController.text;
-    var password = myController2.text;
-    var password2 = myController3.text;
-    print(email);
-    print(password);
-    print(password2);
+  void verifyClicked() {
+    String code = myController.text;
+    print(code);
     //insert logic to check database here
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => EmailVerificationPage(
-        )),
+        MaterialPageRoute(builder: (context) => Home()),
       );
 
   }

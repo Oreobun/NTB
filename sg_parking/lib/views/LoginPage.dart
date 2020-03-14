@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sgparking/views/RegistrationPage.dart';
 import 'home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -143,9 +144,9 @@ class _LoginPageState extends State<LoginPage> {
               style: TextStyle(color: Colors.grey),
             ),
             FlatButton(
-              onPressed: () {},
               textColor: Colors.black87,
               child: Text("Create Account"),
+              onPressed: createAccountClicked
             )
           ],
         )
@@ -166,6 +167,13 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
 
+  }
+
+  void createAccountClicked(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RegistrationPage()),
+    );
   }
 }
 
