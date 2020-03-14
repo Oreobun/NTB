@@ -1,5 +1,5 @@
-import 'package:sgparking/control/Register.dart';
-import 'package:sgparking/control/Sign_in.dart';
+import 'package:sgparking/views/register.dart';
+import 'package:sgparking/views/sign_in.dart';
 import 'package:flutter/material.dart';
 
 class Authenticate extends StatefulWidget {
