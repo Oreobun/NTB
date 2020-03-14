@@ -9,6 +9,10 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="sgparking"
         android:icon="@mipmap/ic_launcher">
+        <!-- Add the following entry, with your google maps API key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAnqOmXifNMFXXdASb1zMJRa7PHB9AmrBQ"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
