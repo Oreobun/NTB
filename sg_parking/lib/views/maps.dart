@@ -7,7 +7,10 @@ class Maps extends StatelessWidget {
   double zoomVal = 10.0;
   final LatLng _center = const LatLng(1.3521, 103.8198);
 
-
+  // TODO add centering function to current gps location
+  //TODO search radius around current location pin
+  //TODO dynamic creation of markers
+  //TODO route creation using dummy coords
   @override
   Widget build(BuildContext context) {
     return Scaffold(
