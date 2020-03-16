@@ -37,6 +37,8 @@ class Maps extends StatelessWidget {
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
+        myLocationEnabled: true,
+        compassEnabled: true,
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
           target: _center,
@@ -77,11 +79,11 @@ class Maps extends StatelessWidget {
           }),
     );
   }
+  //_addMarker(){
+  //  var marker = MarkerOptions(
+  //    positions: ...
+  //  )
+ // }
 
-  Marker NTU= Marker(
-    markerId: MarkerId('NTU'),
-    position: LatLng(1.3483,103.6831),
-    infoWindow: InfoWindow(title: 'NTU')
-  );
 }
 
