@@ -112,6 +112,7 @@ class _HomePageState extends State<SearchMap> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Carpark Search'),
+          backgroundColor: Colors.blue[900],
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.report),
@@ -145,11 +146,12 @@ class _HomePageState extends State<SearchMap> {
                 fullscreenDialog: false,
               ),
               icon: Icon(Icons.sort),
+                tooltip: 'sort',
             ),
               prefixText: 'filter             ',
               prefixIcon: IconButton(
               icon: Icon(Icons.filter_list),
-
+                tooltip: 'filter',
 
             ),
           ),
