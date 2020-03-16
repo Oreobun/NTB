@@ -23,15 +23,12 @@ class _HomePageState extends State<SearchMap> {
     var notes = List<CarparkInfo>();
 
     if (response.statusCode == 200) {
-      print("test test");
       var notesJson = json.decode(response.body);
-      var test = Response.fromJson(notesJson);
-      print("test test");
-      var ha = test.items[0];
-      for (var noteJson in ha.carparkData) {
+      var result = Response.fromJson(notesJson);
+      var carparkData = result.items[0];
+      for (var noteJson in carparkData.carparkData) {
         notes.add(noteJson.carparkInfo[0]);
       }
-      print(notes.length);
       Comparator<CarparkInfo> lotsComparator = (a,b) => int.parse(a.totalLots).compareTo(int.parse(b.totalLots));
       notes.sort(lotsComparator);
     }
