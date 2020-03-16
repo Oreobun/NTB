@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'TutorialPage.dart';
-import 'SearchDisplayPage(list).dart';
-import 'SearchDisplayPage(map).dart';
+import 'tutorial_page.dart';
+import 'search_display_page_list.dart';
+import 'search_display_page_map.dart';
 
 class Home extends StatefulWidget {
   @override

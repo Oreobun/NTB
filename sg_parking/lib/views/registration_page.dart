@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sgparking/views/EmailVerificationPage.dart';
+import 'package:sgparking/control/auth.dart';
+import 'package:sgparking/views/email_verification_page.dart';
 import 'home.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -8,6 +10,16 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+
+  final AuthService _auth = AuthService();
+  //final _formKey = GlobalKey<FormState>();
+
+  // text field state
+  String email = '';
+  String password = '';
+  String error = '';
+
+
   // To adjust the layout according to the screen size
   // so that our layout remains responsive ,we need to
   // calculate the screen height
@@ -128,7 +140,31 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           left: 38, right: 38, top: 15, bottom: 15),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),
-                      onPressed: createAccountClicked
+                      onPressed: () async {
+                        email = myController.text;
+                        password = myController2.text;
+                        // TODO checking re-enter password matches with password
+                        print(email);
+                        print(password);
+                        // TODO making sure parameters for registering accounts correct, eg email have @xyz.com and not @xyz.c using _formKey
+                        dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                        if (result == null){
+                          setState (() => error = "Email is already in use");
+                        } else {
+                          Navigator.push(
+                            context,
+                              MaterialPageRoute(builder: (context) => Home(
+                                // TODO do email verification via google maybe
+//                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
+                            )),
+                          );
+                        }
+                      },
+                  ),
+                  SizedBox(height: 12.0),
+                  Text(
+                    error,
+                    style: TextStyle(color: Colors.red, fontSize: 12.0),
                   )
                 ],
               ),
@@ -140,19 +176,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  void createAccountClicked() {
+  Future createAccountClicked() async {
     String email = myController.text;
-    var password = myController2.text;
-    var password2 = myController3.text;
-    print(email);
-    print(password);
-    print(password2);
+    String password = myController2.text;
+    String password2 = myController3.text;
+
+
     //insert logic to check database here
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => EmailVerificationPage(
-        )),
-      );
+
+
+
+    // use basic email verification from auth from firebase first, add in signing in from google etc in the future
+//      Navigator.push(
+//        context,
+//        MaterialPageRoute(builder: (context) => EmailVerificationPage(
+//        )),
+//      );
 
   }
 }

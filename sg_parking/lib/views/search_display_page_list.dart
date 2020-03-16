@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:sgparking/entity/Carpark.dart';
+import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
