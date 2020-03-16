@@ -11,6 +11,8 @@ import 'views/email_verification_page.dart';
 
 void main() => runApp(MyApp());
 
+// useless text
+
 //class MyApp extends StatelessWidget {
 //  // This widget is the root of your application.
 //  @override
