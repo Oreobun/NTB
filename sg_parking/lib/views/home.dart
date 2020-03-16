@@ -30,6 +30,9 @@ class _HomeState extends State<Home> {
       _currentPage = _listPages[selectedIndex];
     });
   }
+  Future navigateToSubPage(context) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +45,12 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.all(12.0),
           child: _currentPage,
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.red[600],
+        child: Icon(Icons.location_on),
+        onPressed: () {navigateToSubPage(context);},
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
