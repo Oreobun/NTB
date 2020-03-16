@@ -1,6 +1,6 @@
+// TODO: report and send the content to an email address
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 class Report extends StatefulWidget {
   @override
