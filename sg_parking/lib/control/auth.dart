@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebasetest/models/user.dart';
+import 'package:sgparking/entity/user.dart';
 import 'package:flutter/cupertino.dart';
 
 class AuthService {

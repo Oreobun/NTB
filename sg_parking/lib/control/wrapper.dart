@@ -1,8 +1,8 @@
-import 'package:sgparking/views/Authenticate.dart';
-import 'package:sgparking/views/Home.dart';
+import 'package:sgparking/views/authenticate.dart';
+import 'package:sgparking/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sgparking/entity/User.dart';
+import 'package:sgparking/entity/user.dart';
 
 class Wrapper extends StatelessWidget {
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sgparking/views/RegistrationPage.dart';
+import 'package:sgparking/control/auth.dart';
+import 'package:sgparking/views/registration_page.dart';
 import 'home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,6 +9,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  final AuthService _auth = AuthService();
+//  final _formKey = GlobalKey<FormState>();
+
+  // text field state
+  String email = '';
+  String password = '';
+  String error = '';
+
+
   // To adjust the layout according to the screen size
   // so that our layout remains responsive ,we need to
   // calculate the screen height
@@ -109,6 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       MaterialButton(
+                        // TODO add in functionality to find password for existing users
                         onPressed: () {},
                         child: Text("Forgot Password ?"),
                       ),
@@ -123,9 +135,31 @@ class _LoginPageState extends State<LoginPage> {
                             left: 38, right: 38, top: 15, bottom: 15),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        onPressed: loginClicked
-                      )
+                        onPressed: () async {
+                          email = myController.text;
+                          password = myController2.text;
+                          // TODO validate using google email etc
+                          //if (_formKey.currentState.validate()){
+                            dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                            if (result == null){
+                              setState (() => error = "Could not sign in with these credentials");
+                            } else{
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Home(
+                                    // TODO do email verification via google maybe
+  //                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
+                                  )),
+                                );
+                            }
+                        },
+                      ),
                     ],
+                  ),
+                  SizedBox(height: 12.0),
+                  Text(
+                    error,
+                    style: TextStyle(color: Colors.red, fontSize: 14.0),
                   )
                 ],
               ),
@@ -154,20 +188,21 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void loginClicked() {
-    var username = myController.text;
-    var password = myController2.text;
-    print(username);
-    print(password);
-    //insert logic to check database here
-    if(username == "kenny" && password == "1234"){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Home()),
-      );
-    }
-
-  }
+//  void loginClicked() {
+//
+//    var username = myController.text;
+//    var password = myController2.text;
+//    print(username);
+//    print(password);
+//    //insert logic to check database here
+//    if(username == "kenny" && password == "1234"){
+//      Navigator.push(
+//        context,
+//        MaterialPageRoute(builder: (context) => Home()),
+//      );
+//    }
+//
+//  }
 
   void createAccountClicked(){
     Navigator.push(

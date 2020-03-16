@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:sgparking/entity/Carpark.dart';
+import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'ReportPage.dart';
-import 'SortPage.dart';
+import 'report_page.dart';
+import 'sort_page.dart';
 class SearchMap extends StatefulWidget {
 
   @override
@@ -23,15 +23,12 @@ class _HomePageState extends State<SearchMap> {
     var notes = List<CarparkInfo>();
 
     if (response.statusCode == 200) {
-      print("test test");
       var notesJson = json.decode(response.body);
-      var test = Response.fromJson(notesJson);
-      print("test test");
-      var ha = test.items[0];
-      for (var noteJson in ha.carparkData) {
+      var result = Response.fromJson(notesJson);
+      var carparkData = result.items[0];
+      for (var noteJson in carparkData.carparkData) {
         notes.add(noteJson.carparkInfo[0]);
       }
-      print(notes.length);
       Comparator<CarparkInfo> lotsComparator = (a,b) => int.parse(a.totalLots).compareTo(int.parse(b.totalLots));
       notes.sort(lotsComparator);
     }
@@ -112,6 +109,7 @@ class _HomePageState extends State<SearchMap> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Carpark Search'),
+          backgroundColor: Colors.blue[900],
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.report),
@@ -145,11 +143,12 @@ class _HomePageState extends State<SearchMap> {
                 fullscreenDialog: false,
               ),
               icon: Icon(Icons.sort),
+                tooltip: 'sort',
             ),
               prefixText: 'filter             ',
               prefixIcon: IconButton(
               icon: Icon(Icons.filter_list),
-
+                tooltip: 'filter',
 
             ),
           ),
