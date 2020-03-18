@@ -34,6 +34,8 @@ dependencies:
   url_launcher:
   flutter_email_sender: ^2.2.2
   mailer: ^3.0.4
+  geolocation: ^1.1.2
+  app_settings: ^3.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

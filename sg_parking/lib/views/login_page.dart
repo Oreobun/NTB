@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sgparking/control/auth.dart';
 import 'package:sgparking/views/registration_page.dart';
 import 'home.dart';
+import 'gps_validation_page.dart';
+import 'package:geolocation/geolocation.dart';
+import 'package:app_settings/app_settings.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,6 +12,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  static final GpsValidation test = new GpsValidation();
+
 
   final AuthService _auth = AuthService();
 //  final _formKey = GlobalKey<FormState>();
@@ -32,6 +38,43 @@ class _LoginPageState extends State<LoginPage> {
     myController2.dispose();
     super.dispose();
   }
+
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Enable location"),
+      onPressed:  () {
+        AppSettings.openLocationSettings();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+        },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Error"),
+      content: Text("Location is not enabled, please enable before proceeding"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
@@ -136,22 +179,28 @@ class _LoginPageState extends State<LoginPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         onPressed: () async {
-                          email = myController.text;
-                          password = myController2.text;
-                          // TODO validate using google email etc
-                          //if (_formKey.currentState.validate()){
+                          final GeolocationResult result =  await Geolocation.isLocationOperational();
+                          if(result.isSuccessful) {
+                            email = myController.text;
+                            password = myController2.text;
+                            // TODO validate using google email etc
+                            //if (_formKey.currentState.validate()){
                             dynamic result = await _auth.signInWithEmailAndPassword(email, password);
                             if (result == null){
                               setState (() => error = "Could not sign in with these credentials");
                             } else{
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => Home(
-                                    // TODO do email verification via google maybe
-  //                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
-                                  )),
-                                );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Home(
+                                  // TODO do email verification via google maybe
+                                  //                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
+                                )),
+                              );
                             }
+                          } else {
+                            print('failed');
+                            showAlertDialog(context);
+                          }
                         },
                       ),
                     ],

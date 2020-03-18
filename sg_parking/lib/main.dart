@@ -9,6 +9,8 @@ import 'views/login_page.dart';
 import 'views/registration_page.dart';
 import 'views/email_verification_page.dart';
 
+
+
 void main() => runApp(MyApp());
 
 //class MyApp extends StatelessWidget {
@@ -25,8 +27,10 @@ void main() => runApp(MyApp());
 //    );
 //  }
 //}
-
 class MyApp extends StatelessWidget {
+
+
+
   @override
 //  Widget build(BuildContext context) {
 //    return StreamProvider<User>.value(
@@ -36,11 +40,10 @@ class MyApp extends StatelessWidget {
 //      ),
 //    );
 //  }
-
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: LoginPage(),
     );
   }
 
