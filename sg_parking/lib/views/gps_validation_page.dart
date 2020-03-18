@@ -10,18 +10,17 @@ class GpsValidation {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Rewind and remember'),
+          title: Text('Error'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('You will never be satisfied.'),
-                Text('You\’re like me. I’m never satisfied.'),
+                Text('fill in sth here'),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Regret'),
+              child: Text('continue'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
