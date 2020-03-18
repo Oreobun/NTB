@@ -112,6 +112,8 @@ class _HomePageState extends State<SearchMap> {
           backgroundColor: Colors.blue[900],
           actions: <Widget>[
             IconButton(
+              tooltip: 'report',
+              color: Colors.red[900],
               icon: Icon(Icons.report),
               onPressed: () => _openReportPage(
                 context: context,
