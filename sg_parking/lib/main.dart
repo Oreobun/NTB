@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sgparking/control/login.dart';
 import 'package:sgparking/control/wrapper.dart';
+import 'package:sgparking/views/maps.dart';
 import 'control/auth.dart';
 import 'entity/user.dart';
 import 'views/home.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: Structure(),
     );
   }
 
