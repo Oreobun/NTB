@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -61,37 +62,6 @@ class _HomePageState extends State<SearchMap> {
     _howAreYou = _gratitudeResponse ?? '';
   }
 
-  /* alert dialog pop out */
-//
-//  Future<void> _neverSatisfied() async {
-//    return showDialog<void>(
-//      context: context,
-//      barrierDismissible: false, // user must tap button!
-//      builder: (BuildContext context) {
-//        return AlertDialog(
-//          title: Text('Rewind and remember'),
-//          content: SingleChildScrollView(
-//            child: ListBody(
-//              children: <Widget>[
-//                Text('You will never be satisfied.'),
-//                Text('You\’re like me. I’m never satisfied.'),
-//              ],
-//            ),
-//          ),
-//          actions: <Widget>[
-//            FlatButton(
-//              child: Text('Regret'),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
-
-
 
   @override
   void initState() {
@@ -114,6 +84,7 @@ class _HomePageState extends State<SearchMap> {
             IconButton(
               tooltip: 'report',
               color: Colors.red[900],
+              splashColor: Colors.redAccent,
               icon: Icon(Icons.report),
               onPressed: () => _openReportPage(
                 context: context,
@@ -177,6 +148,7 @@ class _HomePageState extends State<SearchMap> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+
             Text(
              'Total lots = ' + _notesForDisplay[index].totalLots,
               style: TextStyle(
@@ -197,8 +169,25 @@ class _HomePageState extends State<SearchMap> {
                   color: Colors.grey.shade800
               ),
             ),
+
+
+
+              ButtonBar(
+                children: <Widget>[
+                  RaisedButton(
+                    color: Colors.blueAccent,
+                    child: const Text('Route'),
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    textColor: Colors.white,
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+
           ],
         ),
+
       ),
     );
   }
