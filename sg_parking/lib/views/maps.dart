@@ -27,6 +27,15 @@ class Maps extends StatefulWidget {
   _MapsState createState() => _MapsState();
 }
 
+=======
+
+class Maps extends StatefulWidget {
+
+  @override
+  _MapsState createState() => _MapsState();
+}
+
+>>>>>>> 5dcc1eb
 class _MapsState extends State<Maps> {
   BitmapDescriptor pinLocationIcon;
   GoogleMapController _controller; //Googlemap controller
@@ -66,7 +75,11 @@ class _MapsState extends State<Maps> {
     );
   }
 
+<<<<<<< HEAD
   Widget _buildGoogleMaps(BuildContext context) {
+=======
+  Container _buildGoogleMaps(BuildContext context) {
+>>>>>>> 5dcc1eb
     return Container(
       height: MediaQuery
           .of(context)
@@ -141,6 +154,7 @@ class _MapsState extends State<Maps> {
           flat: true,
           anchor: Offset(0.5, 0.5),
           icon: pinLocationIcon);
+<<<<<<< HEAD
       circle = Circle(
           circleId: CircleId("car"),
           radius: 3,
@@ -151,6 +165,19 @@ class _MapsState extends State<Maps> {
     });
 
   /*Future<void> _minus(double zoomVal) async {
+=======
+
+      circle = Circle(
+      circleId: CircleId("car"),
+      radius: 3,
+      zIndex: 1,
+      strokeColor: Colors.blue,
+      center: latlng,
+      fillColor: Colors.blue.withAlpha(70));
+      });
+
+    /*Future<void> _minus(double zoomVal) async {
+>>>>>>> 5dcc1eb
     final GoogleMapController controller = await _controller;
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: _center, zoom: zoomVal)));
   }
@@ -159,13 +186,21 @@ class _MapsState extends State<Maps> {
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: _center, zoom: zoomVal)));
   }*/
 
+<<<<<<< HEAD
   //Loading car assets
+=======
+    //Loading car assets
+>>>>>>> 5dcc1eb
 
 
 
   }
 
+<<<<<<< HEAD
   /*Marker NTU = Marker(
+=======
+/*Marker NTU = Marker(
+>>>>>>> 5dcc1eb
     markerId: MarkerId('ntu'),
     position: LatLng(1.3483, 103.6831),
     infoWindow: InfoWindow(title: 'Los Tacos'),
@@ -174,7 +209,11 @@ class _MapsState extends State<Maps> {
     ),
   );*/
 
+<<<<<<< HEAD
   /*Widget _zoomminusfunction() {
+=======
+/*Widget _zoomminusfunction() {
+>>>>>>> 5dcc1eb
     return Align(
       alignment: Alignment.topLeft,
       child: IconButton(
@@ -214,5 +253,9 @@ class _MapsState extends State<Maps> {
     });
   }*/
 */
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 5dcc1eb
