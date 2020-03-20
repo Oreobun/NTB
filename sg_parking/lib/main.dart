@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sgparking/control/login.dart';
 import 'package:sgparking/control/wrapper.dart';
+import 'package:sgparking/views/maps.dart';
 import 'control/auth.dart';
 import 'entity/user.dart';
 import 'views/home.dart';
 import 'views/login_page.dart';
 import 'views/registration_page.dart';
 import 'views/email_verification_page.dart';
+
+
 
 void main() => runApp(MyApp());
 
@@ -27,8 +30,10 @@ void main() => runApp(MyApp());
 //    );
 //  }
 //}
-
 class MyApp extends StatelessWidget {
+
+
+
   @override
 //  Widget build(BuildContext context) {
 //    return StreamProvider<User>.value(
@@ -38,7 +43,6 @@ class MyApp extends StatelessWidget {
 //      ),
 //    );
 //  }
-
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,

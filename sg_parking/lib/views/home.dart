@@ -4,6 +4,7 @@ import 'search_display_page_list.dart';
 import 'search_display_page_map.dart';
 import 'maps.dart';
 
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -13,6 +14,8 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
   List _listPages = List();
   Widget _currentPage;
+
+
 
   @override
   void initState() {
