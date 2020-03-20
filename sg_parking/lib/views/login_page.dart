@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
   final AuthService _auth = AuthService();
-//  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   // text field state
   String email = '';
@@ -70,121 +70,134 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget loginCard(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(top: screenHeight / 4),
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            elevation: 8,
-            child: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: screenHeight / 4),
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    controller: myController,
-                    decoration: InputDecoration(
-                        labelText: "Your Email", hasFloatingPlaceholder: true),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: myController2,
-                    decoration: InputDecoration(
-                        labelText: "Password", hasFloatingPlaceholder: true),
-                    obscureText: true,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      MaterialButton(
-                        // TODO add in functionality to find password for existing users
-                        onPressed: () {},
-                        child: Text("Forgot Password ?"),
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      FlatButton(
-                        child: Text("Login"),
-                        color: Color(0xFF4B9DFE),
-                        textColor: Colors.white,
-                        padding: EdgeInsets.only(
-                            left: 38, right: 38, top: 15, bottom: 15),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        onPressed: () async {
-                          email = myController.text;
-                          password = myController2.text;
-                          // TODO validate using google email etc
-                          //if (_formKey.currentState.validate()){
-                            dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-                            if (result == null){
-                              setState (() => error = "Could not sign in with these credentials");
-                            } else{
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      controller: myController,
+                      validator: (val) => val.isEmpty ? "Enter your email" : null,
+                      decoration: InputDecoration(
+                          labelText: "Your Email", hasFloatingPlaceholder: true),
+                      onChanged: (val) {
+                        setState(() => email = val);
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: myController2,
+                      validator: (val) => val.isEmpty ? "Enter an password" : null,
+                      decoration: InputDecoration(
+                          labelText: "Your password", hasFloatingPlaceholder: true),
+                      obscureText: true,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        MaterialButton(
+                          // TODO add in functionality to find password for existing users
+                          onPressed: () {},
+                          child: Text("Forgot Password ?"),
+                        ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                        FlatButton(
+                          child: Text("Login"),
+                          color: Color(0xFF4B9DFE),
+                          textColor: Colors.white,
+                          padding: EdgeInsets.only(
+                              left: 38, right: 38, top: 15, bottom: 15),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          onPressed: () async {
+                            email = myController.text;
+                            password = myController2.text;
+                            // TODO validate using google email etc
+                            if (_formKey.currentState.validate()) {
+                              dynamic result = await _auth
+                                  .signInWithEmailAndPassword(email, password);
+                              if (result == null) {
+                                setState(() =>
+                                error =
+                                "Could not sign in with these credentials");
+                              } else {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => Home(
-                                    // TODO do email verification via google maybe
-  //                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
-                                  )),
+                                  MaterialPageRoute(builder: (context) =>
+                                      Home(
+                                        // TODO do email verification via google maybe
+                                        //                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
+                                      )),
                                 );
+                              }
                             }
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12.0),
-                  Text(
-                    error,
-                    style: TextStyle(color: Colors.red, fontSize: 14.0),
-                  )
-                ],
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12.0),
+                    Text(
+                      error,
+                      style: TextStyle(color: Colors.red, fontSize: 14.0),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: 40,
-            ),
-            Text(
-              "Don't have an account ?",
-              style: TextStyle(color: Colors.grey),
-            ),
-            FlatButton(
-              textColor: Colors.black87,
-              child: Text("Create Account"),
-              onPressed: createAccountClicked
-            )
-          ],
-        )
-      ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                "Don't have an account ?",
+                style: TextStyle(color: Colors.grey),
+              ),
+              FlatButton(
+                textColor: Colors.black87,
+                child: Text("Create Account"),
+                onPressed: createAccountClicked
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 
