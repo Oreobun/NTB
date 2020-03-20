@@ -36,6 +36,7 @@ dependencies:
   flutter_email_sender: ^2.2.2
   mailer: ^3.0.4
   geolocation: ^1.1.2
+  geolocator: ^4.0.3
   app_settings: ^3.0.1
 dev_dependencies:
   flutter_test:
