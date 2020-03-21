@@ -91,6 +91,7 @@ class _MapsState extends State<Maps> {
       Position location = await Geolocator()  //constructing geolocator object to call current position
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       print(location);
+      print('test test test');
       updateMarkerAndCircle(location); //updates marker position with new location
 
       var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);

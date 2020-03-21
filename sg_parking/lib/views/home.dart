@@ -23,9 +23,9 @@ class _HomeState extends State<Home> {
 
     _listPages
       ..add(Tutorial())
-      ..add(App())
+      ..add(GeoListenPage())
       ..add(SearchMap());
-    _currentPage = App();
+    _currentPage = GeoListenPage();
   }
 
   void _changePage(int selectedIndex) {
