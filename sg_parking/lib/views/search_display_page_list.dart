@@ -1,70 +1,80 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
+import 'dart:async';
 
-Future<Response> fetchResponse() async {
-  final response =
-  await http.get('https://api.data.gov.sg/v1/transport/carpark-availability');
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response, then parse the JSON.
-    return Response.fromJson(json.decode(response.body));
-  } else {
-    // If the server did not return a 200 OK response, then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-
-void main() => runApp(App());
-
-class App extends StatefulWidget {
-  App({Key key}) : super(key: key);
-
+class GeoListenPage extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  _GeoListenPageState createState() => _GeoListenPageState();
 }
 
-class _MyAppState extends State<App> {
-  Future<Response> futureResponse;
+class _GeoListenPageState extends State<GeoListenPage> {
+
+  Geolocator geolocator = Geolocator();
 
 
+  Position userLocation;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    futureResponse = fetchResponse();
+    _getLocation().then((position) {
+      userLocation = position;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fetch Data Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Carpark Search'),
-        ),
-        body: Center(
-          child: FutureBuilder<Response>(
-            future: futureResponse,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data.items[0].carparkData[0].carparkInfo[0].totalLots);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-
-              // By default, show a loading spinner.
-              return CircularProgressIndicator();
-            },
-          ),
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            userLocation == null
+                ? CircularProgressIndicator()
+                : Text("Location:" +
+                userLocation.latitude.toString() +
+                " " +
+                userLocation.longitude.toString()),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RaisedButton(
+                onPressed: () {
+                  _getLocation().then((value) {
+                    setState(() {
+                      userLocation = value;
+                    });
+                  });
+                },
+                color: Colors.blue,
+                child: Text(
+                  "Get Location",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Future<Position> _getLocation() async {
+    var currentLocation;
+
+    try {
+      currentLocation = await geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+
+      GeolocationStatus geolocationStatus  = await Geolocator().checkGeolocationPermissionStatus();
+      print(geolocationStatus);
+      print('test test');
+
+    } catch (e) {
+      currentLocation = null;
+    }
+
+    return currentLocation;
   }
 }
