@@ -6,10 +6,13 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:sgparking/views/maps_services.dart' as services;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+const apiKey = "AIzaSyAnqOmXifNMFXXdASb1zMJRa7PHB9AmrBQ";
 
 
 class Maps extends StatefulWidget {
-
   @override
   _MapsState createState() => _MapsState();
 }
@@ -21,7 +24,10 @@ class _MapsState extends State<Maps> {
   Marker marker;
   Circle circle;
   double zoomVal = 10.0;
-  final LatLng _center = const LatLng(1.3521, 103.8198);
+  final LatLng _intialPos = const LatLng(1.340165306, 103.675497298);
+  final LatLng _lastPos = const LatLng(1.2966, 103.7764);
+  Set<Marker> _markers = {};
+  Set<Polyline> _polyLines = {};
   @override
   void initState(){
     super.initState();
@@ -42,7 +48,7 @@ class _MapsState extends State<Maps> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.location_searching),
           onPressed: () {
-            getCurrentLocation();
+            getCurrentLocation(); sendRequests(_lastPos);
           }),
       body: Stack(
           children: <Widget>[
@@ -67,14 +73,15 @@ class _MapsState extends State<Maps> {
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
         },
-        markers: Set.of((marker != null) ? [marker] : []),
+        markers: _markers,
         circles: Set.of((circle != null) ? [circle] : []),
         zoomGesturesEnabled: true,
         myLocationEnabled: true,
         compassEnabled: true,
         mapType: MapType.normal,
+        polylines: _polyLines,
         initialCameraPosition: CameraPosition(
-          target: _center,
+          target: _intialPos,
           zoom: 10.0,
         ),
       ),
@@ -90,7 +97,10 @@ class _MapsState extends State<Maps> {
     try {
       Position location = await Geolocator()  //constructing geolocator object to call current position
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      List<Placemark> placemark = await Geolocator()
+          .placemarkFromCoordinates(location.latitude, location.longitude); //getting the current address from the coordinates if needed to display
       print(location);
+      print('test test test');
       updateMarkerAndCircle(location); //updates marker position with new location
 
       var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
@@ -112,14 +122,13 @@ class _MapsState extends State<Maps> {
     }
   }
   void updateMarkerAndCircle(Position newLocalData) { //takes new location data and image
-    LatLng latlng = LatLng(1.3521, 103.8198);//LatLng(newLocalData.latitude, newLocalData.longitude);
+    LatLng latlng = _intialPos;//LatLng(newLocalData.latitude, newLocalData.longitude);
     _controller.moveCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-        bearing: 192.8334901395799,
         target: latlng,
         tilt: 0,
-        zoom: 18.00)));
-    this.setState(() {
-      marker = Marker(
+        zoom: 12.00)));
+    setState(() {
+      _markers.add(Marker(
           markerId: MarkerId("home"),
           position: latlng,
           rotation: newLocalData.heading,
@@ -127,7 +136,7 @@ class _MapsState extends State<Maps> {
           zIndex: 2,
           flat: true,
           anchor: Offset(0.5, 0.5),
-          icon: pinLocationIcon);
+          icon: pinLocationIcon));
       circle = Circle(
           circleId: CircleId("car"),
           radius: 3,
@@ -136,6 +145,9 @@ class _MapsState extends State<Maps> {
           center: latlng,
           fillColor: Colors.blue.withAlpha(70));
     });
+
+
+
 
     /*Future<void> _minus(double zoomVal) async {
     final GoogleMapController controller = await _controller;
@@ -151,6 +163,82 @@ class _MapsState extends State<Maps> {
 
 
   }
+  // ! CREATE LAGLNG LIST
+  List<LatLng> _convertToLatLng(List points) {
+    List<LatLng> result = <LatLng>[];
+    for (int i = 0; i < points.length; i++) {
+      if (i % 2 != 0) {
+        result.add(LatLng(points[i - 1], points[i]));
+      }
+    }
+    return result;
+  }
+
+  // !DECODE POLY
+  List _decodePoly(String poly) {
+    var list = poly.codeUnits;
+    var lList = new List();
+    int index = 0;
+    int len = poly.length;
+    int c = 0;
+// repeating until all attributes are decoded
+    do {
+      var shift = 0;
+      int result = 0;
+
+      // for decoding value of one attribute
+      do {
+        c = list[index] - 63;
+        result |= (c & 0x1F) << (shift * 5);
+        index++;
+        shift++;
+      } while (c >= 32);
+      /* if value is negetive then bitwise not the value */
+      if (result & 1 == 1) {
+        result = ~result;
+      }
+      var result1 = (result >> 1) * 0.00001;
+      lList.add(result1);
+    } while (index < len);
+
+/*adding to previous value as done in encoding */
+    for (var i = 2; i < lList.length; i++) lList[i] += lList[i - 2];
+
+    print(lList.toString());
+
+    return lList;
+  }
+  void _addMarker(LatLng location) {
+    _markers.add(Marker(
+        markerId: MarkerId("destination"),
+        position: location,
+        infoWindow: InfoWindow(title: "address of destination", snippet: "go here"),
+        icon: BitmapDescriptor.defaultMarker));
+  }
+
+  void createRoute(String encodedPoly){
+    setState(() {
+      _polyLines.add(Polyline(polylineId: PolylineId("address"),color: Colors.black, width: 10,
+          points: _convertToLatLng(_decodePoly(encodedPoly))));
+    });
+  }
+  void sendRequests(LatLng destination) async{
+    //LatLng destination = LatLng(position.latitude, position.longitude);
+    _addMarker(destination);
+    String route = await getRouteCoordinates(_intialPos, destination);
+    print(route);
+    createRoute(route);
+    print("created route");
+  }
+
+  Future<String> getRouteCoordinates(LatLng l1, LatLng l2) async {
+    print("getting coords");
+    String url = "https://maps.googleapis.com/maps/api/directions/json?origin=${l1.latitude},${l1.longitude}&destination=${l2.latitude},${l2.longitude}&key=$apiKey";
+    http.Response response = await http.get(url);
+    Map values = jsonDecode(response.body);
+    return values["routes"][0]["overview_polyline"]["points"];
+  }
+
 
 /*Marker NTU = Marker(
     markerId: MarkerId('ntu'),
@@ -172,7 +260,8 @@ class _MapsState extends State<Maps> {
           }),
     );
   }
-  Widget _zoomplusfunction() {
+  Widget _zoomplusfuncti
+on() {
     return Align(
       alignment: Alignment.topRight,
       child: IconButton(
