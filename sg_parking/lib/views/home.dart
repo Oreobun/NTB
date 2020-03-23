@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sgparking/views/contact_us_page.dart';
+import 'package:sgparking/views/help_page.dart';
 import 'tutorial_page.dart';
 import 'search_display_page_list.dart';
 import 'search_display_page_map.dart';
@@ -15,17 +17,17 @@ class _HomeState extends State<Home> {
   List _listPages = List();
   Widget _currentPage;
 
+  List<String> _listTitle = ['Map', 'List', 'Help Center'];
 
 
   @override
   void initState() {
     super.initState();
-
     _listPages
-      ..add(Tutorial())
-      ..add(GeoListenPage())
-      ..add(SearchMap());
-    _currentPage = GeoListenPage();
+      ..add(Maps())
+      ..add(SearchMap())
+      ..add(Help());
+    _currentPage = Maps();
   }
 
   void _changePage(int selectedIndex) {
@@ -42,7 +44,11 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SGParking'),
+        title: Text(_listTitle[_currentIndex], style: TextStyle(
+            color: Colors.black
+        )),
+        centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: SafeArea(
         child: Padding(
@@ -60,16 +66,16 @@ class _HomeState extends State<Home> {
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            title: Text('Tutorial'),
+            icon: Icon(Icons.map),
+            title: Text('Map'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            title: Text('SearchList'),
+            title: Text('List'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            title: Text('SearchMap'),
+            icon: Icon(Icons.chat_bubble_outline),
+            title: Text('Help'),
           ),
         ],
         onTap: (selectedIndex) => _changePage(selectedIndex),
