@@ -1,3 +1,8 @@
+/*This class displays the home page of our application
+* there is 3 tabs at the bottom of the page,
+* switching between map view and list view*/
+
+
 import 'package:flutter/material.dart';
 import 'package:sgparking/views/contact_us_page.dart';
 import 'package:sgparking/views/help_page.dart';

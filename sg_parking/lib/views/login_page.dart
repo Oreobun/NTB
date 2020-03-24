@@ -1,7 +1,12 @@
+/*This dartfile displays the log in page for our application,
+this class will authenticate with firebase server to verify log in credentials*/
+
+
 import 'package:flutter/material.dart';
 import 'package:sgparking/control/auth.dart';
 import 'package:sgparking/views/registration_page.dart';
 import 'home.dart';
+import 'package:http/http.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,6 +23,25 @@ class _LoginPageState extends State<LoginPage> {
   String password = '';
   String error = '';
 
+//  String url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/add_feedback';
+//  String json = '{"name": "kenny", "email": "kennyjclew123@gmail.com", "contact": "82182057", "subject": "commendation", "description": "Carpark app very good"}';
+//
+//  Future _makePostRequest(String url, String json) async {
+//    // set up POST request arguments
+//
+//    Map<String, String> headers = {"Content-type": "application/json"};
+//
+//    // make POST request
+//    Response response = await post(url, headers: headers, body: json);
+//    // check the status code for the result
+//    int statusCode = response.statusCode;
+//    // this API passes back the id of the new item added to the body
+//    String body = response.body;
+//    print(body);
+//  }
+//  void initState() {
+//    _makePostRequest();
+//  }
 
   // To adjust the layout according to the screen size
   // so that our layout remains responsive ,we need to
@@ -143,6 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
                           onPressed: () async {
+//                            _makePostRequest(url, json);
                             email = myController.text;
                             password = myController2.text;
                             // TODO validate using google email etc
@@ -224,5 +249,23 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
+//
+//class Response {
+//  bool status;
+//  String error;
+//
+//  Response({this.status, this.error});
+//
+//  Response.fromJson(Map<String, dynamic> json) {
+//    status = json['status'];
+//    error = json['error'];
+//  }
+//
+//  Map<String, dynamic> toJson() {
+//    final Map<String, dynamic> data = new Map<String, dynamic>();
+//    data['status'] = this.status;
+//    data['error'] = this.error;
+//    return data;
+//  }
+//}
 

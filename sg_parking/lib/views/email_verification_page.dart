@@ -1,3 +1,6 @@
+/*This class contains the interface for the
+ email verification page for our application*/
+
 import 'package:flutter/material.dart';
 import 'home.dart';
 

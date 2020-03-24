@@ -1,3 +1,6 @@
+/* This dart file contains the map page which displays the
+user's current location as well as the surrounding carparks */
+
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';

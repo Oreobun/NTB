@@ -1,3 +1,7 @@
+/*This class contains the interface of the contact us page for our
+application user will be able to submit an enquiry
+which will be sent to the admin's email */
+
 import 'package:flutter/material.dart';
 import 'package:sgparking/views/help_page.dart';
 import 'home.dart';

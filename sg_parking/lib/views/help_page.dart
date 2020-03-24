@@ -1,3 +1,8 @@
+/*This class displays the help page for our application,
+containing the FAQs as well as a button
+* to redirect to the contact us page */
+
+
 import 'package:flutter/material.dart';
 import 'package:sgparking/views/contact_us_page.dart';
 import 'contact_us_page.dart';
