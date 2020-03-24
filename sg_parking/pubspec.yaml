@@ -31,7 +31,6 @@ dependencies:
   google_maps_flutter: ^0.5.21+12
   location: ^2.5.0
   firebase_auth: ^0.15.5+2
-  cloud_firestore: ^0.13.4+2
   provider: ^4.0.4
   flutter_email_sender: ^2.2.2
   mailer: ^3.0.4

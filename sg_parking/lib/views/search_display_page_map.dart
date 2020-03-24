@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'report_page.dart';
 import 'sort_page.dart';
+import 'maps.dart';
+
 class SearchMap extends StatefulWidget {
 
   @override
@@ -13,25 +14,25 @@ class SearchMap extends StatefulWidget {
 }
 
 class _HomePageState extends State<SearchMap> {
+
   String _howAreYou = '...';
   List<CarparkInfo> _notes = List<CarparkInfo>();
   List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
 
   Future<List<CarparkInfo>> fetchNotes() async {
-    var url = 'https://api.data.gov.sg/v1/transport/carpark-availability';
+    var url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/get_carparks_info';
     var response = await http.get(url);
-
     var notes = List<CarparkInfo>();
-
     if (response.statusCode == 200) {
       var notesJson = json.decode(response.body);
-      var result = Response.fromJson(notesJson);
-      var carparkData = result.items[0];
-      for (var noteJson in carparkData.carparkData) {
-        notes.add(noteJson.carparkInfo[0]);
+      for (int i = 0; i < notesJson.length; i++ ) {
+        var result = CarparkInfo.fromJson(notesJson[i]);
+        notes.add(result);
       }
-      Comparator<CarparkInfo> lotsComparator = (a,b) => int.parse(a.totalLots).compareTo(int.parse(b.totalLots));
-      notes.sort(lotsComparator);
+//      notes = result as List<CarparkInfo>;
+//      print(notes.length);
+//      Comparator<CarparkInfo> lotsComparator = (a,b) => int.parse(a.totalLots).compareTo(int.parse(b.totalLots));
+//      notes.sort(lotsComparator);
     }
     return notes;
   }
@@ -47,6 +48,10 @@ class _HomePageState extends State<SearchMap> {
     // Navigator.pushNamed(context, '/about');
   }
 
+
+  Future navigateToSubPage(context) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
+  }
 
   void _openPageSort(
       {BuildContext context, bool fullscreenDialog = false}) async {
@@ -150,37 +155,37 @@ class _HomePageState extends State<SearchMap> {
           children: <Widget>[
 
             Text(
-             'Total lots = ' + _notesForDisplay[index].totalLots,
+             'Location = ' + _notesForDisplay[index].address,
               style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey.shade900
               ),
             ),
             Text(
-              'Lots available = ' + _notesForDisplay[index].lotsAvailable,
+              'Lots available = ' + _notesForDisplay[index].availableLots.toString(),
               style: TextStyle(
-                  color: Colors.grey.shade800
+                  color: _notesForDisplay[index].availableLots/_notesForDisplay[index].totalLots < 0.7 ? (_notesForDisplay[index].availableLots/_notesForDisplay[index].totalLots < 0.3 || _notesForDisplay[index].availableLots == -1 )? Colors.red :Colors.orange : Colors.green
               ),
             ),
             Text(
-              'Lot type = ' + _notesForDisplay[index].lotType,
+              'Lot type = ' + _notesForDisplay[index].carParkType + '\nParking system = ' + _notesForDisplay[index].typeOfParkingSystem+ '\nShort term parking = ' + _notesForDisplay[index].shortTermParking,
               style: TextStyle(
                   color: Colors.grey.shade800
               ),
             ),
-
-
 
               ButtonBar(
                 children: <Widget>[
                   RaisedButton(
                     color: Colors.blueAccent,
-                    child: const Text('Route'),
+                    child: const Text('Get direction'),
                     shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30.0)),
                     textColor: Colors.white,
-                    onPressed: () {},
+                    onPressed: () {
+                      navigateToSubPage(context);
+                    },
                   ),
                 ],
               ),
