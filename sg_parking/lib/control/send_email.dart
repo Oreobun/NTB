@@ -1,3 +1,8 @@
+/*A controller class that allows report_page to send email to a particular email.
+In this case the email is set to be a mutual email address set up by the development team.
+When a report is filed, developers can validate the information and edit the database accordingly.
+ */
+
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
@@ -9,10 +14,6 @@ class SendEmail{
     String password = 'qweqwe123!!!';
 
     final smtpServer = gmail(username, password);
-    // Use the SmtpServer class to configure an SMTP server:
-    // final smtpServer = SmtpServer('smtp.domain.com');
-    // See the named arguments of SmtpServer for further configuration
-    // options.
 
     // Create our message.
     final message = Message()

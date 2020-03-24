@@ -26,7 +26,7 @@ class _SortState extends State<Sort> {
   void initState() {
     super.initState();
 
-    _gratitudeList..add('Distance')..add('Price')..add('Availablility');
+    _gratitudeList..add('Distance')..add('availableLots')..add('Alphebet');
     _radioGroupValue = widget.radioGroupValue;
   }
 
@@ -58,13 +58,13 @@ class _SortState extends State<Sort> {
                 groupValue: _radioGroupValue,
                 onChanged: (index) => _radioOnChanged(index),
               ),
-              Text('Price'),
+              Text('availableLots'),
               Radio(
                 value: 2,
                 groupValue: _radioGroupValue,
                 onChanged: (index) => _radioOnChanged(index),
               ),
-              Text('Availablility'),
+              Text('Alphebet'),
             ],
           ),
         ),

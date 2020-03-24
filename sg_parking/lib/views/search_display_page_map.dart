@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'report_page.dart';
 import 'sort_page.dart';
 import 'maps.dart';
-
+import 'package:sgparking/control/carpark_info_ctr.dart';
 class SearchMap extends StatefulWidget {
 
   @override
@@ -18,24 +16,8 @@ class _HomePageState extends State<SearchMap> {
   String _howAreYou = '...';
   List<CarparkInfo> _notes = List<CarparkInfo>();
   List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
+  CarparkController carparkController = new CarparkController();
 
-  Future<List<CarparkInfo>> fetchNotes() async {
-    var url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/get_carparks_info';
-    var response = await http.get(url);
-    var notes = List<CarparkInfo>();
-    if (response.statusCode == 200) {
-      var notesJson = json.decode(response.body);
-      for (int i = 0; i < notesJson.length; i++ ) {
-        var result = CarparkInfo.fromJson(notesJson[i]);
-        notes.add(result);
-      }
-//      notes = result as List<CarparkInfo>;
-//      print(notes.length);
-//      Comparator<CarparkInfo> lotsComparator = (a,b) => int.parse(a.totalLots).compareTo(int.parse(b.totalLots));
-//      notes.sort(lotsComparator);
-    }
-    return notes;
-  }
 
   void _openReportPage({BuildContext context, bool fullscreenDialog = false}) {
     Navigator.push(
@@ -65,17 +47,30 @@ class _HomePageState extends State<SearchMap> {
       ),
     );
     _howAreYou = _gratitudeResponse ?? '';
+    print('test test');
+    print(_howAreYou);
   }
 
 
   @override
   void initState() {
-    fetchNotes().then((value) {
+    int sortResult = -1;
+    if (_howAreYou == "Distance"){
+      sortResult = -1;
+    }
+    else if (_howAreYou == "availableLots"){
+    sortResult = 2;
+    }
+    else if (_howAreYou == 'Alphebet'){
+      sortResult = 3;
+    }
+    carparkController.fetchNotes(sortResult).then((value) {
       setState(() {
         _notes.addAll(value);
         _notesForDisplay = _notes;
       });
     });
+
     super.initState();
   }
 
@@ -165,7 +160,7 @@ class _HomePageState extends State<SearchMap> {
             Text(
               'Lots available = ' + _notesForDisplay[index].availableLots.toString(),
               style: TextStyle(
-                  color: _notesForDisplay[index].availableLots/_notesForDisplay[index].totalLots < 0.7 ? (_notesForDisplay[index].availableLots/_notesForDisplay[index].totalLots < 0.3 || _notesForDisplay[index].availableLots == -1 )? Colors.red :Colors.orange : Colors.green
+                  color:  _notesForDisplay[index].availableLots == -1 ? Colors.red : _notesForDisplay[index].availableLots/_notesForDisplay[index].totalLots < 0.7 ? ((_notesForDisplay[index].availableLots/_notesForDisplay[index].totalLots < 0.3) )? Colors.red :Colors.orange : Colors.green
               ),
             ),
             Text(
