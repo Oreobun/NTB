@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:sgparking/views/maps_services.dart' as services;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 const apiKey = "AIzaSyAnqOmXifNMFXXdASb1zMJRa7PHB9AmrBQ";
