@@ -15,7 +15,7 @@ class SendEmail{
 
     final smtpServer = gmail(username, password);
 
-    // Create our message.
+    // Create our message
     final message = Message()
       ..from = Address(username, name)
       ..recipients.add('noturningbackcz2006@gmail.com')
