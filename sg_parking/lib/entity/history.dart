@@ -1,3 +1,7 @@
+/*
+This object class contains attributes of a user's history
+ */
+
 class History{
   DateTime timeStamp;
   String pageAccess;

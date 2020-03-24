@@ -1,3 +1,7 @@
+/*
+This object class contains attributes of a user's account
+ */
+
 import 'package:flutter/cupertino.dart';
 
 class Account{

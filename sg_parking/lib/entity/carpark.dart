@@ -1,3 +1,7 @@
+/*
+This object class contains attributes of a carpark
+ */
+
 class Response {
   List<CarparkInfo> items;
 

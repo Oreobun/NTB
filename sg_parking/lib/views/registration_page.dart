@@ -1,7 +1,3 @@
-/*This class contains the interface for registration functionality.
-* User can create a account in this page and the account information will be stored in our fire base
-* data base. User can navigate here from the login_page and navigate back to the login_page  */
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sgparking/control/auth.dart';
@@ -129,7 +125,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       controller: myController2,
                       validator: (val) => val.isEmpty ? "Enter an password" : null,
                       decoration: InputDecoration(
-                          labelText: "Your password", hasFloatingPlaceholder: true),
+                          labelText: "Enter password", hasFloatingPlaceholder: true),
                       obscureText: true,
                       onChanged: (val) {
                         setState(() => email = val);
@@ -142,7 +138,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       controller: myController3,
                       validator: (val) => val.isEmpty ? "Re-enter password" : null,
                       decoration: InputDecoration(
-                          labelText: "Your password", hasFloatingPlaceholder: true),
+                          labelText: "Re-Enter password", hasFloatingPlaceholder: true),
                       obscureText: true,
                       onChanged: (val) {
                         setState(() => email = val);
@@ -152,6 +148,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       height: 30,
                     ),
                     Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         FlatButton(
                           child: Text("Go back"),
@@ -161,7 +158,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               left: 38, right: 38, top: 15, bottom: 15),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
-                          onPressed: (){}
+                          onPressed: (){
+                            Navigator.pop(context);
+                          }
                         ),
 
                         FlatButton(

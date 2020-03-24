@@ -1,10 +1,6 @@
-/*This class contains the interface of the contact us page for our
-application user will be able to submit an enquiry
-which will be sent to the admin's email */
-
 import 'package:flutter/material.dart';
-import 'package:sgparking/views/help_page.dart';
-import 'home.dart';
+import 'package:sgparking/entity/feedback.dart';
+import 'package:sgparking/control/send_feedback.dart';
 
 class ContactUs extends StatefulWidget {
   @override
@@ -13,14 +9,11 @@ class ContactUs extends StatefulWidget {
 
 class _ContactUsPageState extends State<ContactUs> {
   @override
-  final myController = TextEditingController();
-  final myController2 = TextEditingController();
-  final myController3 = TextEditingController();
-  final myController4 = TextEditingController();
-  String name = '';
-  String contact = '';
-  String subject = '';
-  String description = '';
+  final nameText = TextEditingController();
+  final emailText = TextEditingController();
+  final contactText = TextEditingController();
+  final subjectText = TextEditingController();
+  final descriptionText = TextEditingController();
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,9 +47,27 @@ class _ContactUsPageState extends State<ContactUs> {
                     ),
 
                     TextFormField(
-                      controller: myController,
+                      controller: nameText,
                       decoration: InputDecoration(
                           hintText: "Enter Name..",
+                          hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
+                          hasFloatingPlaceholder: true),
+                    ),
+                    SizedBox(
+                        height: 20
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                          'Email',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18)
+                      ),
+                    ),
+                    TextFormField(
+                      controller: emailText,
+                      decoration: InputDecoration(
+                          hintText: "Enter Email..",
                           hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
                           hasFloatingPlaceholder: true),
                     ),
@@ -72,7 +83,7 @@ class _ContactUsPageState extends State<ContactUs> {
                       ),
                     ),
                     TextFormField(
-                      controller: myController2,
+                      controller: contactText,
                       decoration: InputDecoration(
                           hintText: "Enter Contact Number..",
                           hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
@@ -90,15 +101,16 @@ class _ContactUsPageState extends State<ContactUs> {
                       ),
                     ),
                     TextFormField(
-                      controller: myController3,
+                      controller: subjectText,
+                      maxLength: 100,
+                      maxLines: 2,
+                      textAlign: TextAlign.left,
                       decoration: InputDecoration(
-                          hintText: "Enter subject of the matter..",
+                          hintText: "Enter a Subject..",
                           hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
                           hasFloatingPlaceholder: true),
                     ),
-                    SizedBox(
-                        height: 20
-                    ),
+
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -108,7 +120,7 @@ class _ContactUsPageState extends State<ContactUs> {
                       ),
                     ),
                     TextFormField(
-                      controller: myController4,
+                      controller: descriptionText,
                       maxLength: 200,
                       maxLines: null,
                       minLines: 3,
@@ -144,10 +156,8 @@ class _ContactUsPageState extends State<ContactUs> {
   }
 
   void sendClicked(){
-    this.name = myController.text;
-    this.contact = myController2.text;
-    this.subject = myController3.text;
-    this.description = myController4.text;
+    SendFeedBack sendFeedBack = new SendFeedBack();
+    sendFeedBack.sendFeedBack(nameText.text, emailText.text, contactText.text, subjectText.text, descriptionText.text);
     Navigator.pop(
       context);
   }
