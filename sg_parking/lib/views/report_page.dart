@@ -1,4 +1,7 @@
-// TODO: report and send the content to an email address
+/*This class contains the interface for report functionality.
+* User can send a report to the developers when he/she encounter a problems near a carpark such as:
+* shelter collapse, gantry damaged, fallen tress, etc. Upon filling up the details of the report, user can send the information to the developers through
+* send_email.dart. User must fill in all text fields before the report can be sent.  */
 import 'package:flutter/material.dart';
 import 'package:sgparking/control/send_email.dart';
 

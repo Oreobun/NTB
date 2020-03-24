@@ -1,3 +1,8 @@
+/*This class contains the interface for sign in function.
+* User will be able to log in from this page if he/she has an account.
+* If user doest not have an account, user can navigate to registration page from here to perform a registration.
+* The page also checks if the user has activate their location service before allowing the user to proceed.
+* User thus must have both an account and location service enabled before logging in  */
 import 'package:sgparking/control/auth.dart';
 import 'package:flutter/material.dart';
 

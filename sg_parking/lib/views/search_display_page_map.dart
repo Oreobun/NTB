@@ -1,3 +1,7 @@
+/*This class contains the interface for our search function in list view.
+* The class will be able to navigate to the filter/sort page and has the main search function for user
+* to perform a search. Furthermore, it will allow the user to see the shortest route to a particular carpark.
+* This will be the main functionality of the project, whereby user can use this page to perform search through the government API  */
 import 'dart:async';
 import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +9,9 @@ import 'report_page.dart';
 import 'sort_page.dart';
 import 'maps.dart';
 import 'package:sgparking/control/carpark_info_ctr.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class SearchMap extends StatefulWidget {
 
   @override
@@ -12,12 +19,39 @@ class SearchMap extends StatefulWidget {
 }
 
 class _HomePageState extends State<SearchMap> {
-
+  int sortResult = -1;
   String _howAreYou = '...';
   List<CarparkInfo> _notes = List<CarparkInfo>();
   List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
   CarparkController carparkController = new CarparkController();
 
+  Future<List<CarparkInfo>> fetchNotes(int sortNum) async {
+    var url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/get_carparks_info';
+    var response = await http.get(url);
+    var notes = List<CarparkInfo>();
+    if (response.statusCode == 200) {
+      var notesJson = json.decode(response.body);
+      for (int i = 0; i < notesJson.length; i++) {
+        var result = CarparkInfo.fromJson(notesJson[i]);
+        notes.add(result);
+      }
+      if (sortNum == -1){
+        // do noting
+      }
+      else if (sortNum == 0){
+        // kiv
+      }
+      else if (sortNum == 1){
+        Comparator<CarparkInfo> lotsComparator1 = (a,b) => (a.availableLots).compareTo((b.availableLots));
+        notes.sort(lotsComparator1);
+      }
+      else if (sortNum == 2) {
+        Comparator<CarparkInfo> lotsComparator2 = (a,b) => a.address.compareTo((b.address));
+        notes.sort(lotsComparator2);
+      }
+    }
+    return notes;
+  }
 
   void _openReportPage({BuildContext context, bool fullscreenDialog = false}) {
     Navigator.push(
@@ -49,22 +83,27 @@ class _HomePageState extends State<SearchMap> {
     _howAreYou = _gratitudeResponse ?? '';
     print('test test');
     print(_howAreYou);
+    setState(() {
+      if (_howAreYou == "Distance"){
+        sortResult = -1;
+      }
+      else if (_howAreYou == "availableLots"){
+        sortResult = 2;
+        print('test test 45');
+      }
+      else if (_howAreYou == 'Alphebet'){
+        sortResult = 3;
+      }
+    });
   }
 
 
   @override
   void initState() {
-    int sortResult = -1;
-    if (_howAreYou == "Distance"){
-      sortResult = -1;
-    }
-    else if (_howAreYou == "availableLots"){
-    sortResult = 2;
-    }
-    else if (_howAreYou == 'Alphebet'){
-      sortResult = 3;
-    }
-    carparkController.fetchNotes(sortResult).then((value) {
+
+    print('test test 4');
+
+    fetchNotes(sortResult).then((value) {
       setState(() {
         _notes.addAll(value);
         _notesForDisplay = _notes;
@@ -129,7 +168,7 @@ class _HomePageState extends State<SearchMap> {
             text = text.toLowerCase();
             setState(() {
               _notesForDisplay = _notes.where((note) {
-                var note2 = note.totalLots.toString();
+                var note2 = note.address;
                 var noteTitle = note2.toLowerCase();
                 return noteTitle.contains(text);
               }).toList();

@@ -1,3 +1,7 @@
+/*This class contains the interface for our tutorial function.
+* Images that demonstrate the user of our SGParking app will be shown here.
+* They will be shown is sequence and user can forward/backward using swipe motions */
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 

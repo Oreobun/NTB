@@ -1,3 +1,7 @@
+/*This class contains the interface for registration functionality.
+* User can create a account in this page and the account information will be stored in our fire base
+* data base. User can navigate here from the login_page and navigate back to the login_page  */
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sgparking/control/auth.dart';

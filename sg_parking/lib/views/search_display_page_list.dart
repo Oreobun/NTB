@@ -1,3 +1,8 @@
+/*This class contains the interface for our search function.
+* This dart file is overlapping with search_display_page_map.dart and will be
+* removed at the end of the project  */
+
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';

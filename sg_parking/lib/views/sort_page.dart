@@ -1,3 +1,6 @@
+/*This class contains the interface for our sort function.
+* A sorted result of carpark information is return to the Search_display_page_map.dart.
+* User can choose to sort by either available lots, distance or gantry height. */
 import 'package:flutter/material.dart';
 
 class Sort extends StatefulWidget {
