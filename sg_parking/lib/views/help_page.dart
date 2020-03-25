@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sgparking/views/contact_us_page.dart';
 import 'contact_us_page.dart';
+import 'package:sgparking/entity/entry.dart';
 
 class Help extends StatelessWidget {
 
@@ -62,7 +63,7 @@ class Help extends StatelessWidget {
                     'If you have any other enquiries, comments or feedback, click the button below to contact us.'
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Align(
                     alignment: Alignment.topLeft,
@@ -96,19 +97,14 @@ class Help extends StatelessWidget {
   }
 }
 
-class Entry {
-  Entry(this.title, [this.children = const <Entry>[]]);
 
-  final String title;
-  final List<Entry> children;
-}
 
 final List<Entry> data = <Entry>[
   Entry(
     '1. Where can I find the tutorial page',
     <Entry>[
       Entry(
-        'The tutorial page can be found at blahblahablha',
+        'The tutorial page is shown after registering an account. You can also find it in this tab at the bottom.',
       ),
     ],
   ),
@@ -126,23 +122,23 @@ final List<Entry> data = <Entry>[
     ],
   ),
   Entry(
-    '3. My GPS is not pointing me to my current location, what can i do to fix it?)',
+    '4. How can I search for a carpark around a specific area?',
     <Entry>[
-      Entry('Try restarting your the application. If that does not help, enable and disable location services.'
+      Entry('You can do so by navigating the map to the area and carparks in the view will be shown'
       )
     ],
   ),
   Entry(
-    '3. My GPS is not pointing me to my current location, what can i do to fix it?)',
+    '5. How can I find out more details about a carpark?',
     <Entry>[
-      Entry('Try restarting your the application. If that does not help, enable and disable location services.'
+      Entry('More information on a carpark can be seen when you select on it.',
       )
     ],
   ),
   Entry(
-    '3. My GPS is not pointing me to my current location, what can i do to fix it?)',
+    '6. Where can I feedback to the devs about a certain concern I have?',
     <Entry>[
-      Entry('Try restarting your the application. If that does not help, enable and disable location services.'
+      Entry('You can reach the dev team by tapping on the Contact Us button found below on this page.'
       )
     ],
   ),

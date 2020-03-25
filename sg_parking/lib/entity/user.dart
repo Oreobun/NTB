@@ -1,3 +1,7 @@
+/*
+This object class contains attributes of a user
+ */
+
 class User {
 
   final String uid;

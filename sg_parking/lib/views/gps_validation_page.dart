@@ -1,3 +1,6 @@
+/*This class  displays a pop up to ask user to turn
+on loaction services if location services is not turned on*/
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocation/geolocation.dart';

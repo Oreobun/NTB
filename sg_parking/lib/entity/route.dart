@@ -1,3 +1,7 @@
+/*
+This object class contains attributes of a map's route
+ */
+
 class Route{
   var route;
   var start;

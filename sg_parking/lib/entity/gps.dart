@@ -1,3 +1,7 @@
+/*
+This object class contains attributes of a GPS
+ */
+
 class GPS{
   var location;
   void onCreate(){

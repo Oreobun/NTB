@@ -1,12 +1,8 @@
-/*This class contains the interface for registration functionality.
-* User can create a account in this page and the account information will be stored in our fire base
-* data base. User can navigate here from the login_page and navigate back to the login_page  */
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sgparking/control/auth.dart';
 import 'package:sgparking/views/email_verification_page.dart';
-import 'package:sgparking/views/login_page.dart';
+import 'package:sgparking/views/help_page.dart';
 import 'home.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -100,16 +96,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Create Account",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: BackButton(
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                          ),
                         ),
-                      ),
+                        Text(
+                          "Create Account",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 15,
@@ -118,7 +124,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       controller: myController,
                       validator: (val) => val.isEmpty ? "Enter an email" : null,
                       decoration: InputDecoration(
-                          labelText: "Your Email", hasFloatingPlaceholder: true),
+                          labelText: "Your Email",
+                          hasFloatingPlaceholder: true),
                       onChanged: (val) {
                         setState(() => email = val);
                       },
@@ -128,9 +135,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                     TextFormField(
                       controller: myController2,
-                      validator: (val) => val.isEmpty ? "Enter an password" : null,
+                      validator: (val) =>
+                      val.isEmpty
+                          ? "Enter an password"
+                          : null,
                       decoration: InputDecoration(
-                          labelText: "Your password", hasFloatingPlaceholder: true),
+                          labelText: "Enter password",
+                          hasFloatingPlaceholder: true),
                       obscureText: true,
                       onChanged: (val) {
                         setState(() => email = val);
@@ -141,9 +152,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                     TextFormField(
                       controller: myController3,
-                      validator: (val) => val.isEmpty ? "Re-enter password" : null,
+                      validator: (val) =>
+                      val.isEmpty
+                          ? "Re-enter password"
+                          : null,
                       decoration: InputDecoration(
-                          labelText: "Your password", hasFloatingPlaceholder: true),
+                          labelText: "Re-Enter password",
+                          hasFloatingPlaceholder: true),
                       obscureText: true,
                       onChanged: (val) {
                         setState(() => email = val);
@@ -152,61 +167,49 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     SizedBox(
                       height: 30,
                     ),
-                    Row(
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text("Go back"),
-                          color: Color(0xFF4B9DFE),
-                          textColor: Colors.white,
-                          padding: EdgeInsets.only(
-                              left: 38, right: 38, top: 15, bottom: 15),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          onPressed: (){}
-                        ),
 
-                        FlatButton(
-                          child: Text("Create"),
-                          color: Color(0xFF4B9DFE),
-                          textColor: Colors.white,
-                          padding: EdgeInsets.only(
-                              left: 38, right: 38, top: 15, bottom: 15),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          onPressed: () async {
-                            email = myController.text;
-                            password = myController2.text;
-                            password2 = myController3.text;
-                            // checking re-enter password matches with password
+                    FlatButton(
+                      child: Text("Create"),
+                      color: Color(0xFF4B9DFE),
+                      textColor: Colors.white,
+                      padding: EdgeInsets.only(
+                          left: 38, right: 38, top: 15, bottom: 15),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      onPressed: () async {
+                        email = myController.text;
+                        password = myController2.text;
+                        password2 = myController3.text;
+                        // checking re-enter password matches with password
 
 
-                            print(email);
-                            print(password);
-                            // making sure parameters for registering accounts correct, eg email have @xyz.com and not @xyz.c using _formKe
-                            if (_formKey.currentState.validate()) {
-                              dynamic result = await _auth
-                                  .registerWithEmailAndPassword(email, password);
-                              if (password != password2) {
-                                setState(() =>
-                                error =
-                                'Password does not match, please re-enter');
-                              }
-                              else if (result == null) {
-                                setState(() => error = "Email is already in use or invalid");
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) =>
-                                      LoginPage(
-                                        // TODO do email verification via google maybe
+                        print(email);
+                        print(password);
+                        // making sure parameters for registering accounts correct, eg email have @xyz.com and not @xyz.c using _formKe
+                        if (_formKey.currentState.validate()) {
+                          dynamic result = await _auth
+                              .registerWithEmailAndPassword(email, password);
+                          if (password != password2) {
+                            setState(() =>
+                            error =
+                            'Password does not match, please re-enter');
+                          }
+                          else if (result == null) {
+                            setState(() =>
+                            error = "Email is already in use or invalid");
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>
+                                  Help(
+                                    // TODO do email verification via google maybe
 //                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
-                                      )),
-                                );
-                              }
-                            }
-                          },
-                        ),
-                      ],
+                                  )
+                              ),
+                            );
+                          }
+                        }
+                      },
                     ),
 
                     SizedBox(height: 12.0),
