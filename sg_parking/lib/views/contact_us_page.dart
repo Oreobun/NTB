@@ -18,9 +18,13 @@ class _ContactUsPageState extends State<ContactUs> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
           title: Text('Help Center', style: TextStyle(
               color: Colors.black
           )),
+
           centerTitle: true,
           backgroundColor: Colors.white,
         ),
