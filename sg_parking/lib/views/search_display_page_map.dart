@@ -9,6 +9,7 @@ import 'report_page.dart';
 import 'sort_page.dart';
 import 'maps.dart';
 import 'package:sgparking/control/carpark_info_ctr.dart';
+import 'package:sgparking/control/distance_ctr.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
@@ -27,7 +28,8 @@ class _HomePageState extends State<SearchMap> {
   static List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
   CarparkController carparkController = new CarparkController();
   Future<List<CarparkInfo>> _notes3;
-
+  DistanceController distanceGet = new DistanceController();
+  
 
 
   void _openReportPage({BuildContext context, bool fullscreenDialog = false}) {
@@ -70,13 +72,14 @@ class _HomePageState extends State<SearchMap> {
   @override
   void initState() {
      print('12345678');
+     distanceGet.getDistance();
     carparkController.fetchNotes(sortResult).then((value) {
       setState(() {
         _notes.addAll(value);
         _notesForDisplay = _notes;
       });
     });
-
+  
     super.initState();
   }
 
