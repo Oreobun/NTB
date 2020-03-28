@@ -1,12 +1,10 @@
-/*This dartfile displays the log in page for our application,
-this class will authenticate with firebase server to verify log in credentials*/
-
-
 import 'package:flutter/material.dart';
 import 'package:sgparking/control/auth.dart';
 import 'package:sgparking/views/registration_page.dart';
 import 'home.dart';
-import 'package:http/http.dart';
+import 'gps_validation_page.dart';
+import 'package:geolocation/geolocation.dart';
+import 'package:app_settings/app_settings.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
+  static final GpsValidation test = new GpsValidation();
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -23,32 +21,13 @@ class _LoginPageState extends State<LoginPage> {
   String password = '';
   String error = '';
 
-//  String url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/add_feedback';
-//  String json = '{"name": "kenny", "email": "kennyjclew123@gmail.com", "contact": "82182057", "subject": "commendation", "description": "Carpark app very good"}';
-//
-//  Future _makePostRequest(String url, String json) async {
-//    // set up POST request arguments
-//
-//    Map<String, String> headers = {"Content-type": "application/json"};
-//
-//    // make POST request
-//    Response response = await post(url, headers: headers, body: json);
-//    // check the status code for the result
-//    int statusCode = response.statusCode;
-//    // this API passes back the id of the new item added to the body
-//    String body = response.body;
-//    print(body);
-//  }
-//  void initState() {
-//    _makePostRequest();
-//  }
-
   // To adjust the layout according to the screen size
   // so that our layout remains responsive ,we need to
   // calculate the screen height
   double screenHeight;
   final myController = TextEditingController();
   final myController2 = TextEditingController();
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -56,6 +35,41 @@ class _LoginPageState extends State<LoginPage> {
     myController2.dispose();
     super.dispose();
   }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Enable location"),
+      onPressed: () {
+        AppSettings.openLocationSettings();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Error"),
+      content: Text("Location is not enabled, please enable before proceeding"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
@@ -127,9 +141,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextFormField(
                       controller: myController,
-                      validator: (val) => val.isEmpty ? "Enter your email" : null,
+                      validator: (val) =>
+                          val.isEmpty ? "Enter your email" : null,
                       decoration: InputDecoration(
-                          labelText: "Your Email", hasFloatingPlaceholder: true),
+                          labelText: "Your Email",
+                          hasFloatingPlaceholder: true),
                       onChanged: (val) {
                         setState(() => email = val);
                       },
@@ -139,9 +155,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextFormField(
                       controller: myController2,
-                      validator: (val) => val.isEmpty ? "Enter an password" : null,
+                      validator: (val) =>
+                          val.isEmpty ? "Enter an password" : null,
                       decoration: InputDecoration(
-                          labelText: "Your password", hasFloatingPlaceholder: true),
+                          labelText: "Your password",
+                          hasFloatingPlaceholder: true),
                       obscureText: true,
                     ),
                     SizedBox(
@@ -167,27 +185,32 @@ class _LoginPageState extends State<LoginPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
                           onPressed: () async {
-//                            _makePostRequest(url, json);
                             email = myController.text;
                             password = myController2.text;
+                            final GeolocationResult result = await Geolocation.isLocationOperational();
                             // TODO validate using google email etc
-                            if (_formKey.currentState.validate()) {
-                              dynamic result = await _auth
-                                  .signInWithEmailAndPassword(email, password);
-                              if (result == null) {
-                                setState(() =>
-                                error =
-                                "Could not sign in with these credentials");
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) =>
-                                      Home(
-                                        // TODO do email verification via google maybe
-                                        //                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
-                                      )),
-                                );
+                            if (result.isSuccessful) {
+                              if (_formKey.currentState.validate()) {
+                                dynamic result =
+                                    await _auth.signInWithEmailAndPassword(
+                                        email, password);
+                                if (result == null) {
+                                  setState(() => error =
+                                      "Could not sign in with these credentials");
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Home(
+                                            // TODO do email verification via google maybe
+                                            //                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
+                                            )),
+                                  );
+                                }
                               }
+                            }
+                            else{
+                              showAlertDialog(context);
                             }
                           },
                         ),
@@ -215,10 +238,9 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(color: Colors.grey),
               ),
               FlatButton(
-                textColor: Colors.black87,
-                child: Text("Create Account"),
-                onPressed: createAccountClicked
-              )
+                  textColor: Colors.black87,
+                  child: Text("Create Account"),
+                  onPressed: createAccountClicked)
             ],
           )
         ],
@@ -242,30 +264,10 @@ class _LoginPageState extends State<LoginPage> {
 //
 //  }
 
-  void createAccountClicked(){
+  void createAccountClicked() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => RegistrationPage()),
     );
   }
 }
-//
-//class Response {
-//  bool status;
-//  String error;
-//
-//  Response({this.status, this.error});
-//
-//  Response.fromJson(Map<String, dynamic> json) {
-//    status = json['status'];
-//    error = json['error'];
-//  }
-//
-//  Map<String, dynamic> toJson() {
-//    final Map<String, dynamic> data = new Map<String, dynamic>();
-//    data['status'] = this.status;
-//    data['error'] = this.error;
-//    return data;
-//  }
-//}
-

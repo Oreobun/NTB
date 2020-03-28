@@ -9,8 +9,10 @@ import 'report_page.dart';
 import 'sort_page.dart';
 import 'maps.dart';
 import 'package:sgparking/control/carpark_info_ctr.dart';
+import 'package:sgparking/control/distance_ctr.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:scoped_model/scoped_model.dart';
 
 class SearchMap extends StatefulWidget {
 
@@ -22,36 +24,13 @@ class _HomePageState extends State<SearchMap> {
   int sortResult = -1;
   String _howAreYou = '...';
   List<CarparkInfo> _notes = List<CarparkInfo>();
-  List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
+  List<CarparkInfo> notes = List<CarparkInfo>();
+  static List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
   CarparkController carparkController = new CarparkController();
+  Future<List<CarparkInfo>> _notes3;
+  DistanceController distanceGet = new DistanceController();
+  
 
-  Future<List<CarparkInfo>> fetchNotes(int sortNum) async {
-    var url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/get_carparks_info';
-    var response = await http.get(url);
-    var notes = List<CarparkInfo>();
-    if (response.statusCode == 200) {
-      var notesJson = json.decode(response.body);
-      for (int i = 0; i < notesJson.length; i++) {
-        var result = CarparkInfo.fromJson(notesJson[i]);
-        notes.add(result);
-      }
-      if (sortNum == -1){
-        // do noting
-      }
-      else if (sortNum == 0){
-        // kiv
-      }
-      else if (sortNum == 1){
-        Comparator<CarparkInfo> lotsComparator1 = (a,b) => (a.availableLots).compareTo((b.availableLots));
-        notes.sort(lotsComparator1);
-      }
-      else if (sortNum == 2) {
-        Comparator<CarparkInfo> lotsComparator2 = (a,b) => a.address.compareTo((b.address));
-        notes.sort(lotsComparator2);
-      }
-    }
-    return notes;
-  }
 
   void _openReportPage({BuildContext context, bool fullscreenDialog = false}) {
     Navigator.push(
@@ -71,7 +50,7 @@ class _HomePageState extends State<SearchMap> {
 
   void _openPageSort(
       {BuildContext context, bool fullscreenDialog = false}) async {
-    final String _gratitudeResponse = await Navigator.push(
+    final List<CarparkInfo> _notes2 = await Navigator.push(
       context,
       MaterialPageRoute(
         fullscreenDialog: fullscreenDialog,
@@ -80,36 +59,27 @@ class _HomePageState extends State<SearchMap> {
         ),
       ),
     );
-    _howAreYou = _gratitudeResponse ?? '';
-    print('test test');
-    print(_howAreYou);
-    setState(() {
-      if (_howAreYou == "Distance"){
-        sortResult = -1;
-      }
-      else if (_howAreYou == "availableLots"){
-        sortResult = 2;
-        print('test test 45');
-      }
-      else if (_howAreYou == 'Alphebet'){
-        sortResult = 3;
-      }
-    });
+
+
+      setState(() {
+        _notesForDisplay = _notes2;
+        _notes = _notes2;
+      });
   }
+
 
 
   @override
   void initState() {
-
-    print('test test 4');
-
-    fetchNotes(sortResult).then((value) {
+     print('12345678');
+     distanceGet.getDistance();
+    carparkController.fetchNotes(sortResult).then((value) {
       setState(() {
         _notes.addAll(value);
         _notesForDisplay = _notes;
       });
     });
-
+  
     super.initState();
   }
 
@@ -132,11 +102,15 @@ class _HomePageState extends State<SearchMap> {
             ),
           ],
         ),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            return index == 0 ? _searchBar() : _listItem(index-1);
-          },
-          itemCount: _notesForDisplay.length+1,
+        body: Center(
+          child: Container(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return index == 0 ? _searchBar() : _listItem(index-1);
+              },
+              itemCount: _notesForDisplay.length+1,
+            ),
+          ),
         )
     );
   }
@@ -189,7 +163,7 @@ class _HomePageState extends State<SearchMap> {
           children: <Widget>[
 
             Text(
-             'Location = ' + _notesForDisplay[index].address,
+             'Location = ' + _notesForDisplay[index].address  ,
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

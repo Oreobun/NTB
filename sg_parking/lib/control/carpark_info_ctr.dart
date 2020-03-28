@@ -11,11 +11,14 @@ import 'package:http/http.dart' as http;
 
 
 class CarparkController {
+
+  var notes = List<CarparkInfo>();
+
   Future<List<CarparkInfo>> fetchNotes(int sortNum) async {
     // Sets up an API call to AWS Elastic Beanstalk
     var url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/get_carparks_info';
     var response = await http.get(url);
-    var notes = List<CarparkInfo>();
+
 
     // Logic to proceed after a successful API call
     if (response.statusCode == 200) {
@@ -34,21 +37,28 @@ class CarparkController {
       }
       else if (sortNum == 0){
         // Logic to return car parks sorted by total lots
+        print("test1");
       }
       //Logic to return car parks sorted by available lots
       else if (sortNum == 1){
         Comparator<CarparkInfo> lotsComparator1 = (a,b) => (a.availableLots).compareTo((b.availableLots));
         notes.sort(lotsComparator1);
+        print("test2");
       }
 
       //Logic to return car parks sorted by address
       else if (sortNum == 2) {
         Comparator<CarparkInfo> lotsComparator2 = (a,b) => a.address.compareTo((b.address));
         notes.sort(lotsComparator2);
+        print("test3");
       }
     }
     return notes;
   }
 
+  List<CarparkInfo> getSortedList(){
+
+    return notes;
+  }
 
 }
