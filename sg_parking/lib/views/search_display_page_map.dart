@@ -3,6 +3,8 @@
 * to perform a search. Furthermore, it will allow the user to see the shortest route to a particular carpark.
 * This will be the main functionality of the project, whereby user can use this page to perform search through the government API  */
 import 'dart:async';
+//import 'dart:html';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
 import 'report_page.dart';
@@ -14,6 +16,12 @@ import 'filter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
+
+class Data {
+  LatLng initialLoc;
+
+  Data ({this.initialLoc});
+}
 
 class SearchMap extends StatefulWidget {
 
@@ -44,8 +52,15 @@ class _HomePageState extends State<SearchMap> {
   }
 
 
-  Future navigateToSubPage(context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
+  Future navigateToSubPage(context, LatLng source) async {
+    final data = Data(initialLoc : source);
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => Maps(),
+        settings:  RouteSettings(
+          arguments: data,
+        ),
+
+    ));
   }
 
   void _openPageSort(
@@ -217,7 +232,7 @@ class _HomePageState extends State<SearchMap> {
                         borderRadius: new BorderRadius.circular(30.0)),
                     textColor: Colors.white,
                     onPressed: () {
-                      navigateToSubPage(context);
+                      navigateToSubPage(context, LatLng(_notesForDisplay[index].lat, _notesForDisplay[index].lng));
                     },
                   ),
                 ],

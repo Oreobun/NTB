@@ -16,16 +16,22 @@ import 'package:sgparking/control/carpark_info_ctr.dart';
 import 'package:provider/provider.dart';
 import '../entity/carpark.dart';
 import '../entity/carpark.dart';
+import 'search_display_page_map.dart';
 const apiKey = "AIzaSyAnqOmXifNMFXXdASb1zMJRa7PHB9AmrBQ";
 
 
 
 class Maps extends StatefulWidget {
+//  final Data data4 = ModalRoute.of(context).settings.arguments;
+//  Maps({this.data4});
+
+
   @override
   _MapsState createState() => _MapsState();
 }
 
 class _MapsState extends State<Maps> {
+
   BitmapDescriptor pinLocationIcon;
   GoogleMapController _controller; //Googlemap controller
   Geolocator geolocator = Geolocator();
@@ -35,12 +41,13 @@ class _MapsState extends State<Maps> {
   double zoomVal = 10.0;
   final LatLng _intialPos = const LatLng(1.340165306, 103.675497298);
   final LatLng _lastPos = const LatLng(1.2966, 103.7764);
-
+  LatLng source;
 
   Set<Marker> _markers = {};
   Set<Polyline> _polyLines = {};
   @override
   void initState(){
+
     super.initState();
     setCustomMapPin();
   }
@@ -100,14 +107,28 @@ class _MapsState extends State<Maps> {
 
   @override
   Widget build(BuildContext context) {
+    final Data data4 = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text('Maps Sample App'),
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.location_searching),
-          onPressed: () {
-            getCurrentLocation(); sendRequests(_lastPos);
+          onPressed: () async {
+            if (data4 != null) {
+              getCurrentLocation();
+              while (true) {
+                getCurrentLocation2();
+                updateMarkerAndCircle2(source);
+                sendRequests(data4.initialLoc, source);
+
+                await new Future.delayed(const Duration(seconds: 1));
+              }
+            }
+            else{
+              getCurrentLocation();
+              sendRequests(_lastPos,_intialPos);
+            }
           }),
       body: Stack(
           children: <Widget>[
@@ -163,17 +184,17 @@ class _MapsState extends State<Maps> {
       print('test test test');
       updateMarkerAndCircle(location); //updates marker position with new location
 
-      var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-      Geolocator().getPositionStream(locationOptions).listen((Position position){  //creating a location stream
-        if (_controller != null) {
-          _controller.moveCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-              bearing: 192.8334901395799,
-              target: LatLng(position.latitude, position.longitude),
-              tilt: 0,
-              zoom: 18.00)));
-          updateMarkerAndCircle(position);
-        }
-      });
+//      var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+//      Geolocator().getPositionStream(locationOptions).listen((Position position){  //creating a location stream
+//        if (_controller != null) {
+//          _controller.moveCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+//              bearing: 192.8334901395799,
+//              target: LatLng(position.latitude, position.longitude),
+//              tilt: 0,
+//              zoom: 18.00)));
+//          updateMarkerAndCircle(position);
+//        }
+//      });
 
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {
@@ -181,8 +202,23 @@ class _MapsState extends State<Maps> {
       }
     }
   }
+
+  void getCurrentLocation2() async {
+    try {
+      Position locationUpdate = await Geolocator()  //constructing geolocator object to call current position
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      setState(() {
+        source = LatLng(locationUpdate.latitude, locationUpdate.longitude);
+      });
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        debugPrint("Permission Denied");
+      }
+    }
+
+  }
   void updateMarkerAndCircle(Position newLocalData) { //takes new location data and image
-    LatLng latlng = _intialPos;//LatLng(newLocalData.latitude, newLocalData.longitude);
+    LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);//LatLng(newLocalData.latitude, newLocalData.longitude);
     _controller.moveCamera(CameraUpdate.newCameraPosition(new CameraPosition(
         target: latlng,
         tilt: 0,
@@ -209,6 +245,8 @@ class _MapsState extends State<Maps> {
 
 
 
+
+
     /*Future<void> _minus(double zoomVal) async {
     final GoogleMapController controller = await _controller;
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: _center, zoom: zoomVal)));
@@ -224,6 +262,32 @@ class _MapsState extends State<Maps> {
 
   }
   // ! CREATE LAGLNG LIST
+
+  void updateMarkerAndCircle2(LatLng input) { //takes new location data and image
+    LatLng latlng = input;//LatLng(newLocalData.latitude, newLocalData.longitude);
+    setState(() {
+      _markers.add(Marker(
+          markerId: MarkerId("home"),
+          position: latlng,
+          rotation: latlng.latitude,
+          draggable: false,
+          zIndex: 2,
+          flat: true,
+          anchor: Offset(0.1, 0.5),
+          icon: pinLocationIcon));
+      circle = Circle(
+          circleId: CircleId("car"),
+          radius: 3,
+          zIndex: 1,
+          strokeColor: Colors.blue,
+          center: latlng,
+          fillColor: Colors.blue.withAlpha(70));
+    });
+
+  }
+
+
+
   List<LatLng> _convertToLatLng(List points) {
     List<LatLng> result = <LatLng>[];
     for (int i = 0; i < points.length; i++) {
@@ -291,14 +355,14 @@ class _MapsState extends State<Maps> {
 
   void createRoute(String encodedPoly){
     setState(() {
-      _polyLines.add(Polyline(polylineId: PolylineId("address"),color: Colors.black, width: 10,
+      _polyLines.add(Polyline(polylineId: PolylineId("address"),color: Colors.blueAccent, width: 3,
           points: _convertToLatLng(_decodePoly(encodedPoly))));
     });
   }
-  void sendRequests(LatLng destination) async{
+  void sendRequests(LatLng destination, LatLng source) async{
     //LatLng destination = LatLng(position.latitude, position.longitude);
     _addMarker(destination);
-    String route = await getRouteCoordinates(_intialPos, destination);
+    String route = await getRouteCoordinates(source, destination);
     print(route);
     createRoute(route);
     print("created route");
@@ -373,6 +437,6 @@ class _MapsState extends State<Maps> {
       });
       print("getLocation: $latLng ");
     });
-  }*/
-//*/
+  }
+//  */
 }
