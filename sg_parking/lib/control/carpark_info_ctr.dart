@@ -16,7 +16,7 @@ class CarparkController {
 
   Future<List<CarparkInfo>> fetchNotes(int sortNum) async {
     // Sets up an API call to AWS Elastic Beanstalk
-    var url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/get_carparks_info';
+//    var url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/get_carparks_info';
     var response = await http.get(url);
 
 
