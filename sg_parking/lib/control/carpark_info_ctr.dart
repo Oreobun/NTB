@@ -27,6 +27,7 @@ class CarparkController {
         var result = CarparkInfo.fromJson(notesJson[i]);
         notes.add(result);
       }
+      notes.removeWhere((item) => item.availableLots == -1);
 //      notes = result as List<CarparkInfo>;
 //      print(notes.length);
 //      Comparator<CarparkInfo> lotsComparator = (a,b) => int.parse(a.totalLots).compareTo(int.parse(b.totalLots));
@@ -50,7 +51,6 @@ class CarparkController {
       else if (sortNum == 2) {
         Comparator<CarparkInfo> lotsComparator2 = (a,b) => a.address.compareTo((b.address));
         notes.sort(lotsComparator2);
-        print("test3");
       }
     }
     return notes;

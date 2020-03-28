@@ -10,6 +10,7 @@ import 'sort_page.dart';
 import 'maps.dart';
 import 'package:sgparking/control/carpark_info_ctr.dart';
 import 'package:sgparking/control/distance_ctr.dart';
+import 'filter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
@@ -27,7 +28,6 @@ class _HomePageState extends State<SearchMap> {
   List<CarparkInfo> notes = List<CarparkInfo>();
   static List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
   CarparkController carparkController = new CarparkController();
-  Future<List<CarparkInfo>> _notes3;
   DistanceController distanceGet = new DistanceController();
   
 
@@ -60,14 +60,35 @@ class _HomePageState extends State<SearchMap> {
       ),
     );
 
-
-      setState(() {
-        _notesForDisplay = _notes2;
-        _notes = _notes2;
-      });
+      if (_notes2 != null) {
+        setState(() {
+          _notesForDisplay = _notes2;
+          _notes = _notes2;
+        });
+      }
   }
 
 
+  void _openPageFilter(
+      {BuildContext context, bool fullscreenDialog = false}) async {
+    final List<CarparkInfo> _notes3 = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: fullscreenDialog,
+        builder: (context) => SliderContainer(
+
+        ),
+      ),
+    );
+
+
+    if (_notes3 != null) {
+      setState(() {
+        _notesForDisplay = _notes3;
+        _notes = _notes3;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -133,6 +154,10 @@ class _HomePageState extends State<SearchMap> {
             ),
               prefixText: 'filter             ',
               prefixIcon: IconButton(
+                onPressed: () => _openPageFilter(
+                  context: context,
+                  fullscreenDialog: false,
+                ),
               icon: Icon(Icons.filter_list),
                 tooltip: 'filter',
 
