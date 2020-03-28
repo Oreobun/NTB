@@ -10,8 +10,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:convert';
+import 'package:sgparking/control/carpark_info_ctr.dart';
+import 'package:provider/provider.dart';
+import '../entity/carpark.dart';
+import '../entity/carpark.dart';
 const apiKey = "AIzaSyAnqOmXifNMFXXdASb1zMJRa7PHB9AmrBQ";
+
 
 
 class Maps extends StatefulWidget {
@@ -23,17 +29,68 @@ class _MapsState extends State<Maps> {
   BitmapDescriptor pinLocationIcon;
   GoogleMapController _controller; //Googlemap controller
   Geolocator geolocator = Geolocator();
+//  CarparkController _mapsController = new CarparkController();
   Marker marker;
   Circle circle;
   double zoomVal = 10.0;
   final LatLng _intialPos = const LatLng(1.340165306, 103.675497298);
   final LatLng _lastPos = const LatLng(1.2966, 103.7764);
+
+
   Set<Marker> _markers = {};
   Set<Polyline> _polyLines = {};
   @override
   void initState(){
     super.initState();
     setCustomMapPin();
+  }
+
+  Widget _showMarkers()  {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: IconButton(
+          icon: Icon(Icons.zoom_out),
+          onPressed: () {
+            CarparkController _mapsController = new CarparkController();
+            Future <List<CarparkInfo>> testest;
+            testest = _mapsController.fetchNotes(1);
+            int counter = 1;
+            double _distanceSet = 3000.0;
+            LatLng _initialLocation = new LatLng(1.340165306, 103.675497298);
+            _addMarkerPivot(_initialLocation);
+            testest.then((results){
+              print(results.length);
+              for (var i in results){
+                LatLng coordinates = new LatLng(i.lat,i.lng);
+                print(coordinates);
+                Future<double> distanceInMeters = Geolocator().distanceBetween(1.340165306, 103.675497298, i.lat, i.lng);
+                distanceInMeters.then((resultss){
+                  print(resultss);
+                  if (resultss < _distanceSet) {
+                    setState(() {
+                      _addMarker(coordinates);
+                      _markers.add(Marker(
+                          markerId: MarkerId("$counter"),
+                          position: coordinates,
+                          draggable: false,
+                          zIndex: 2,
+                          flat: true,
+                          anchor: Offset(0.4, 0.4),
+                          icon: BitmapDescriptor.defaultMarker));
+                      counter++;
+                    });
+
+                  }
+                });
+
+
+              }
+
+            });
+
+
+          }),
+    );
   }
 
   // TODO add centering function to current gps location
@@ -54,7 +111,8 @@ class _MapsState extends State<Maps> {
           }),
       body: Stack(
           children: <Widget>[
-            _buildGoogleMaps(context)
+            _buildGoogleMaps(context),
+            _showMarkers()
             // _zoomminusfunction(), _zoomplusfunction()
           ]
       ),
@@ -137,7 +195,7 @@ class _MapsState extends State<Maps> {
           draggable: false,
           zIndex: 2,
           flat: true,
-          anchor: Offset(0.5, 0.5),
+          anchor: Offset(0.1, 0.5),
           icon: pinLocationIcon));
       circle = Circle(
           circleId: CircleId("car"),
@@ -210,13 +268,26 @@ class _MapsState extends State<Maps> {
 
     return lList;
   }
-  void _addMarker(LatLng location) {
+  void _addMarker(LatLng location) async {
     _markers.add(Marker(
         markerId: MarkerId("destination"),
+
         position: location,
         infoWindow: InfoWindow(title: "address of destination", snippet: "go here"),
         icon: BitmapDescriptor.defaultMarker));
+//    _markers.push(marker);
   }
+
+  void _addMarkerPivot(LatLng location) async {
+    _markers.add(Marker(
+        markerId: MarkerId("Pivot"),
+
+        position: location,
+        infoWindow: InfoWindow(title: "address of destination", snippet: "go here"),
+        icon: BitmapDescriptor.defaultMarker));
+//    _markers.push(marker);
+  }
+
 
   void createRoute(String encodedPoly){
     setState(() {
@@ -251,35 +322,47 @@ class _MapsState extends State<Maps> {
     ),
   );*/
 
-/*Widget _zoomminusfunction() {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: IconButton(
-          icon: Icon(Icons.zoom_out),
-          onPressed: () {
-            zoomVal--;
-            _minus( zoomVal);
-          }),
-    );
-  }
-  Widget _zoomplusfuncti
-on() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: IconButton(
-          icon: Icon(Icons.zoom_in),
-          onPressed: () {
-            zoomVal++;
-            _plus(zoomVal);
-          }),
-    );
-  }
+//Widget _showMarkers() {
+//    return Align(
+//      alignment: Alignment.topLeft,
+//      child: IconButton(
+//          icon: Icon(Icons.zoom_out),
+//          onPressed: () {
+//            CarparkController _mapsController = new CarparkController();
+//            Future <List<CarparkInfo>> testest;
+//            testest = _mapsController.fetchNotes(1);
+//            testest.then((results){
+//              print(results.length);
+//              for (var i in results){
+//                LatLng coordinates = new LatLng(i.xCoord,i.yCoord);
+//                _addMarker(coordinates);
+//              }
+//
+//            });
+//
+//
+//          }),
+//    );
+//}
+//  Widget _zoomplusfuncti
+//on() {
+//    return Align(
+//      alignment: Alignment.topRight,
+//      child: IconButton(
+//          icon: Icon(Icons.zoom_in),
+//          onPressed: () {
+//            zoomVal++;
+//            _plus(zoomVal);
+//          }),
+//    );
+//  }
   //_addMarker(){
   //  var marker = MarkerOptions(
   //    positions: ...
   //  )
  // }
- /*getCurrentLocation() async {
+  /*
+ getCurrentLocation() async {
     var location = new Location();
     LatLng latLng;
     location.onLocationChanged().listen((currentLocation) {
@@ -291,5 +374,5 @@ on() {
       print("getLocation: $latLng ");
     });
   }*/
-*/
+//*/
 }
