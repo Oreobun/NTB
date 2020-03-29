@@ -41,6 +41,7 @@ class _MapsState extends State<Maps> {
   double zoomVal = 10.0;
   final LatLng _intialPos = const LatLng(1.340165306, 103.675497298);
   final LatLng _lastPos = const LatLng(1.2966, 103.7764);
+  bool _toggleMarker = true;
   LatLng source;
 
   Set<Marker> _markers = {};
@@ -52,36 +53,59 @@ class _MapsState extends State<Maps> {
     setCustomMapPin();
   }
 
-  Widget _showMarkers()  {
+  Widget _showMarkers(_toggleMarker)  {
     return Align(
       alignment: Alignment.topLeft,
       child: IconButton(
-          icon: Icon(Icons.zoom_out),
+          icon: Icon(Icons.outlined_flag),
           onPressed: () {
             CarparkController _mapsController = new CarparkController();
             Future <List<CarparkInfo>> testest;
             testest = _mapsController.fetchNotes(1);
             int counter = 1;
-            double _distanceSet = 3000.0;
-            LatLng _initialLocation = new LatLng(1.340165306, 103.675497298);
-            _addMarkerPivot(_initialLocation);
+            double _distanceSet = 1500.0;
+            LatLng _initialLocation = new LatLng(1.340165306, 103.675497298); // change this when use real data
+//            _addMarkerPivot(_initialLocation);
+
             testest.then((results){
               print(results.length);
               for (var i in results){
                 LatLng coordinates = new LatLng(i.lat,i.lng);
-                print(coordinates);
-                Future<double> distanceInMeters = Geolocator().distanceBetween(1.340165306, 103.675497298, i.lat, i.lng);
+//                print(coordinates);
+                Future<double> distanceInMeters = Geolocator().distanceBetween(1.340165306, 103.675497298, i.lat, i.lng); //change this when using real data
                 distanceInMeters.then((resultss){
-                  print(resultss);
+//                  print(resultss);
+                // TODO implement radius parameter, for now set as 1.5km from source
                   if (resultss < _distanceSet) {
                     setState(() {
                       _addMarker(coordinates);
                       _markers.add(Marker(
                           markerId: MarkerId("$counter"),
                           position: coordinates,
+                          infoWindow: InfoWindow(title:  "Available lots: " + i.availableLots.toString() + ", GantryHeight: " + i.gantryHeight.toString(), snippet: "Address: "  + i.address.toString().substring(1,30) + "..." ),
                           draggable: false,
                           zIndex: 2,
                           flat: true,
+                          onTap: () async {
+                            Position location = await Geolocator()  //constructing geolocator object to call current position
+                                .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);  //constructing geolocator object to call current position
+                            setState(() {
+
+
+                              LatLng coordinates2 = LatLng(i.lat,i.lng);
+
+//                              source = LatLng(location.latitude, location.longitude);
+                              print(coordinates2);
+                              print(source);
+                              print(_initialLocation);
+                              sendRequests(coordinates2, _initialLocation);
+//                              sendRequests(coordinates2, source); use this for real data
+
+
+                              print("testu");
+                            });  //constructing geolocator object to call current position
+                          },
+//                          visible: true,
                           anchor: Offset(0.4, 0.4),
                           icon: BitmapDescriptor.defaultMarker));
                       counter++;
@@ -92,6 +116,11 @@ class _MapsState extends State<Maps> {
 
 
               }
+//              setState (() {
+//                print(_toggleMarker);
+//                print("hihi");
+//                _toggleMarker = !_toggleMarker;
+//              });
 
             });
 
@@ -127,13 +156,14 @@ class _MapsState extends State<Maps> {
             }
             else{
               getCurrentLocation();
-              sendRequests(_lastPos,_intialPos);
+
+//              sendRequests(_lastPos,_intialPos);
             }
           }),
       body: Stack(
           children: <Widget>[
             _buildGoogleMaps(context),
-            _showMarkers()
+            _showMarkers(_toggleMarker)
             // _zoomminusfunction(), _zoomplusfunction()
           ]
       ),
@@ -168,6 +198,9 @@ class _MapsState extends State<Maps> {
       ),
     );
   }
+
+
+
   void setCustomMapPin() async {
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(devicePixelRatio: 2.5),
@@ -183,6 +216,8 @@ class _MapsState extends State<Maps> {
       print(location);
       print('test test test');
       updateMarkerAndCircle(location); //updates marker position with new location
+
+
 
 //      var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
 //      Geolocator().getPositionStream(locationOptions).listen((Position position){  //creating a location stream
@@ -203,6 +238,8 @@ class _MapsState extends State<Maps> {
     }
   }
 
+
+
   void getCurrentLocation2() async {
     try {
       Position locationUpdate = await Geolocator()  //constructing geolocator object to call current position
@@ -218,7 +255,9 @@ class _MapsState extends State<Maps> {
 
   }
   void updateMarkerAndCircle(Position newLocalData) { //takes new location data and image
-    LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);//LatLng(newLocalData.latitude, newLocalData.longitude);
+    LatLng latlng = new LatLng(1.340165306, 103.675497298); // testing
+
+//    LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);//LatLng(newLocalData.latitude, newLocalData.longitude);
     _controller.moveCamera(CameraUpdate.newCameraPosition(new CameraPosition(
         target: latlng,
         tilt: 0,
@@ -264,7 +303,10 @@ class _MapsState extends State<Maps> {
   // ! CREATE LAGLNG LIST
 
   void updateMarkerAndCircle2(LatLng input) { //takes new location data and image
-    LatLng latlng = input;//LatLng(newLocalData.latitude, newLocalData.longitude);
+
+    LatLng latlng = new LatLng(1.340165306, 103.675497298); // testing
+
+//    LatLng latlng = input;//LatLng(newLocalData.latitude, newLocalData.longitude);
     setState(() {
       _markers.add(Marker(
           markerId: MarkerId("home"),
