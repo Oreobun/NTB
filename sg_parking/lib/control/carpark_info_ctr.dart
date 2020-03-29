@@ -6,6 +6,7 @@ and also allows for optional sorting by available lots and address.
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:sgparking/entity/carpark.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,17 +17,25 @@ class CarparkController {
 
   Future<List<CarparkInfo>> fetchNotes(int sortNum) async {
     // Sets up an API call to AWS Elastic Beanstalk
-//    var url = 'http://ntb-rest-api.us-east-2.elasticbeanstalk.com/api/get_carparks_info';
-    var response = await http.get(url);
+//    var url = 'http://url';
+//    var response = await http.get(url);
 
+    String data = await rootBundle.loadString('assets/carpark_data.json');
+    var jsonResult = json.decode(data);
+    print('test result');
+    print(jsonResult);
+    for (int i = 0; i < jsonResult.length; i++) {
+      var result = CarparkInfo.fromJson(jsonResult[i]);
+      notes.add(result);
+    }
 
     // Logic to proceed after a successful API call
-    if (response.statusCode == 200) {
-      var notesJson = json.decode(response.body);
-      for (int i = 0; i < notesJson.length; i++) {
-        var result = CarparkInfo.fromJson(notesJson[i]);
-        notes.add(result);
-      }
+//    if (response.statusCode == 200) {
+//      var notesJson = json.decode(response.body);
+//      for (int i = 0; i < notesJson.length; i++) {
+//        var result = CarparkInfo.fromJson(notesJson[i]);
+//        notes.add(result);
+//      }
       notes.removeWhere((item) => item.availableLots == -1);
 //      notes = result as List<CarparkInfo>;
 //      print(notes.length);
@@ -52,7 +61,7 @@ class CarparkController {
         Comparator<CarparkInfo> lotsComparator2 = (a,b) => a.address.compareTo((b.address));
         notes.sort(lotsComparator2);
       }
-    }
+//    }
     return notes;
   }
 

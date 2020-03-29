@@ -4,6 +4,7 @@
 * This will be the main functionality of the project, whereby user can use this page to perform search through the government API  */
 import 'dart:async';
 //import 'dart:html';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:sgparking/control/carpark_info_ctr.dart';
 import 'package:sgparking/control/distance_ctr.dart';
 import 'filter.dart';
 import 'dart:convert';
+import 'package:sgparking/entity/carpark.dart';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 
@@ -33,12 +35,22 @@ class _HomePageState extends State<SearchMap> {
   int sortResult = -1;
   String _howAreYou = '...';
   List<CarparkInfo> _notes = List<CarparkInfo>();
-  List<CarparkInfo> notes = List<CarparkInfo>();
+  var notes = List<CarparkInfo>();
   static List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
   CarparkController carparkController = new CarparkController();
   DistanceController distanceGet = new DistanceController();
-  
 
+
+  loadJson() async {
+    String data = await rootBundle.loadString('assets/carpark_data.json');
+    var jsonResult = json.decode(data);
+    print('test result');
+    print(jsonResult);
+    for (int i = 0; i < jsonResult.length; i++) {
+      var result = CarparkInfo.fromJson(jsonResult[i]);
+      notes.add(result);
+    }
+  }
 
   void _openReportPage({BuildContext context, bool fullscreenDialog = false}) {
     Navigator.push(
@@ -81,6 +93,7 @@ class _HomePageState extends State<SearchMap> {
           _notes = _notes2;
         });
       }
+
   }
 
 
@@ -115,8 +128,12 @@ class _HomePageState extends State<SearchMap> {
         _notesForDisplay = _notes;
       });
     });
-  
+//    WidgetsBinding.instance.addPostFrameCallback((_) async {
+//      await loadJson();
+//    });
+
     super.initState();
+
   }
 
   @override
