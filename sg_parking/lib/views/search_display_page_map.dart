@@ -21,9 +21,11 @@ import 'package:scoped_model/scoped_model.dart';
 
 class Data {
   LatLng initialLoc;
-
-  Data ({this.initialLoc});
+  List<CarparkInfo> carparkList;
+  Data ({this.initialLoc, this.carparkList});
 }
+
+
 
 class SearchMap extends StatefulWidget {
 
@@ -39,7 +41,7 @@ class _HomePageState extends State<SearchMap> {
   static List<CarparkInfo> _notesForDisplay = List<CarparkInfo>();
   CarparkController carparkController = new CarparkController();
   DistanceController distanceGet = new DistanceController();
-
+  List<double> carparkDistance;
 
   loadJson() async {
     String data = await rootBundle.loadString('assets/carpark_data.json');
@@ -76,13 +78,18 @@ class _HomePageState extends State<SearchMap> {
   }
 
   void _openPageSort(
-      {BuildContext context, bool fullscreenDialog = false}) async {
+      {BuildContext context, bool fullscreenDialog = false, List<CarparkInfo> input }) async {
+    final data = Data(carparkList: input);
     final List<CarparkInfo> _notes2 = await Navigator.push(
       context,
       MaterialPageRoute(
         fullscreenDialog: fullscreenDialog,
+        settings:  RouteSettings(
+          arguments: data,
+        ),
         builder: (context) => Sort(
           radioGroupValue: -1,
+
         ),
       ),
     );
@@ -98,11 +105,15 @@ class _HomePageState extends State<SearchMap> {
 
 
   void _openPageFilter(
-      {BuildContext context, bool fullscreenDialog = false}) async {
+      {BuildContext context, bool fullscreenDialog = false, List<CarparkInfo> input}) async {
+    final data = Data(carparkList: input);
     final List<CarparkInfo> _notes3 = await Navigator.push(
       context,
       MaterialPageRoute(
         fullscreenDialog: fullscreenDialog,
+        settings:  RouteSettings(
+          arguments: data,
+        ),
         builder: (context) => SliderContainer(
 
         ),
@@ -128,9 +139,7 @@ class _HomePageState extends State<SearchMap> {
         _notesForDisplay = _notes;
       });
     });
-//    WidgetsBinding.instance.addPostFrameCallback((_) async {
-//      await loadJson();
-//    });
+
 
     super.initState();
 
@@ -180,6 +189,7 @@ class _HomePageState extends State<SearchMap> {
               onPressed: () => _openPageSort(
                 context: context,
                 fullscreenDialog: false,
+                input: _notesForDisplay,
               ),
               icon: Icon(Icons.sort),
                 tooltip: 'sort',
@@ -189,6 +199,7 @@ class _HomePageState extends State<SearchMap> {
                 onPressed: () => _openPageFilter(
                   context: context,
                   fullscreenDialog: false,
+                  input: _notesForDisplay,
                 ),
               icon: Icon(Icons.filter_list),
                 tooltip: 'filter',
@@ -225,6 +236,18 @@ class _HomePageState extends State<SearchMap> {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey.shade900
+              ),
+            ),
+            Text(
+              'Distance = '+ _notesForDisplay[index].carParkDecks.toString() + 'm' ,
+              style: TextStyle(
+                  color: Colors.grey.shade800
+              ),
+            ),
+            Text(
+              'Gantry height = '+ _notesForDisplay[index].gantryHeight.toString() + 'm' ,
+              style: TextStyle(
+                  color: Colors.grey.shade800
               ),
             ),
             Text(

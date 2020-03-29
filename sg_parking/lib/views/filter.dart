@@ -31,26 +31,21 @@ class _SliderContainerState extends State<SliderContainer>{
   );
 
   void _onClick()  {
-    setState(() {
 
-      carparkController.fetchNotes(-1).then((value){
-        _notes3.addAll(value);
-        finishLoading = true;
-      });
-    });
   }
 
   void filterResult(List<CarparkInfo> notes,double dis, double hgt, double avail){
-    for (int i =0; i <notes.length; i++){
-      
-    }
+
     notes.removeWhere((item) => item.gantryHeight < hgt);
-    notes.retainWhere((item) => item.totalLots > dis);
+    notes.retainWhere((item) => item.carParkDecks > dis);
     notes.removeWhere((item) => item.availableLots < avail);
+    finishLoading = true;
+    _notes3 = notes;
   }
 
   @override
   Widget build(BuildContext context){
+    final Data data4 = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: Container(
         child: Column(
@@ -233,10 +228,10 @@ class _SliderContainerState extends State<SliderContainer>{
                     onPressed: ()async {
                       _onClick();
                       while (true) {
-                        if (finishLoading == true) {
-                          filterResult(_notes3, _distance, height, avail);
+
+                          filterResult(data4.carparkList, _distance, height, avail);
                           Navigator.pop(context, _notes3);
-                        }
+
                         await new Future.delayed(const Duration(seconds: 1));
                       }
                     },

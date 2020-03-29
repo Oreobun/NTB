@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:sgparking/entity/carpark.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -28,6 +29,14 @@ class CarparkController {
       var result = CarparkInfo.fromJson(jsonResult[i]);
       notes.add(result);
     }
+    Position location = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    for (int i = 0; i < notes.length; i++) {
+      Future<double> distanceInMeters = Geolocator().distanceBetween(location.latitude, location.longitude, notes[i].lat, notes[i].lng);
+      distanceInMeters.then((value){
+        notes[i].carParkDecks = value.toInt();
+      });
+    }
 
     // Logic to proceed after a successful API call
 //    if (response.statusCode == 200) {
@@ -42,25 +51,7 @@ class CarparkController {
 //      Comparator<CarparkInfo> lotsComparator = (a,b) => int.parse(a.totalLots).compareTo(int.parse(b.totalLots));
 //      notes.sort(lotsComparator);
 
-      if (sortNum == -1){
-        // Signals to controller class to return unsorted car park information
-      }
-      else if (sortNum == 0){
-        // Logic to return car parks sorted by total lots
-        print("test1");
-      }
-      //Logic to return car parks sorted by available lots
-      else if (sortNum == 1){
-        Comparator<CarparkInfo> lotsComparator1 = (a,b) => (a.availableLots).compareTo((b.availableLots));
-        notes.sort(lotsComparator1);
-        print("test2");
-      }
 
-      //Logic to return car parks sorted by address
-      else if (sortNum == 2) {
-        Comparator<CarparkInfo> lotsComparator2 = (a,b) => a.address.compareTo((b.address));
-        notes.sort(lotsComparator2);
-      }
 //    }
     return notes;
   }
