@@ -67,12 +67,13 @@ class _MapsState extends State<Maps> {
             LatLng _initialLocation = new LatLng(1.340165306, 103.675497298); // change this when use real data
 //            _addMarkerPivot(_initialLocation);
 
+
             testest.then((results){
               print(results.length);
               for (var i in results){
                 LatLng coordinates = new LatLng(i.lat,i.lng);
 //                print(coordinates);
-                Future<double> distanceInMeters = Geolocator().distanceBetween(1.340165306, 103.675497298, i.lat, i.lng); //change this when using real data
+                Future<double> distanceInMeters = Geolocator().distanceBetween(source.latitude, source.longitude, i.lat, i.lng); //change this when using real data
                 distanceInMeters.then((resultss){
 //                  print(resultss);
                 // TODO implement radius parameter, for now set as 1.5km from source
