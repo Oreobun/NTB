@@ -42,7 +42,7 @@ class _MapsState extends State<Maps> {
   final LatLng _intialPos = const LatLng(1.340165306, 103.675497298);
   final LatLng _lastPos = const LatLng(1.2966, 103.7764);
   bool _toggleMarker = true;
-  LatLng source;
+  LatLng source = LatLng(1.340165306, 103.675497298);
 
   Set<Marker> _markers = {};
   Set<Polyline> _polyLines = {};
@@ -52,6 +52,7 @@ class _MapsState extends State<Maps> {
     super.initState();
     setCustomMapPin();
     getCurrentLocation();
+    getCurrentLocation2();
   }
 
   Widget _showMarkers(_toggleMarker)  {
@@ -71,6 +72,7 @@ class _MapsState extends State<Maps> {
 
             testest.then((results){
               print(results.length);
+              getCurrentLocation2();
               for (var i in results){
                 LatLng coordinates = new LatLng(i.lat,i.lng);
 //                print(coordinates);
