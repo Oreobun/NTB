@@ -10,6 +10,7 @@ import 'tutorial_page.dart';
 import 'search_display_page_list.dart';
 import 'search_display_page_map.dart';
 import 'maps.dart';
+import 'report_page.dart';
 
 
 class Home extends StatefulWidget {
@@ -22,8 +23,18 @@ class _HomeState extends State<Home> {
   List _listPages = List();
   Widget _currentPage;
 
-  List<String> _listTitle = ['Map', 'List', 'Help Center'];
+  List<String> _listTitle = ['Map', 'List View', 'Help Center'];
 
+  void _openReportPage({BuildContext context, bool fullscreenDialog = false}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: fullscreenDialog,
+        builder: (context) => Report(),
+      ),
+    );
+    // Navigator.pushNamed(context, '/about');
+  }
 
   @override
   void initState() {
@@ -52,8 +63,31 @@ class _HomeState extends State<Home> {
         title: Text(_listTitle[_currentIndex], style: TextStyle(
             color: Colors.black
         )),
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context,false),
+          child: Icon(
+            Icons.backspace,  // add custom icons also
+          ),
+        ),
+        automaticallyImplyLeading: true,
+
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.lightBlueAccent,
+          actions: <Widget>[
+            IconButton(
+              tooltip: 'report',
+              color: Colors.red[900],
+              splashColor: Colors.redAccent,
+              icon: Icon(Icons.report),
+              onPressed: () => _openReportPage(
+                context: context,
+                fullscreenDialog: true,
+              ),
+            ),
+
+
+          ],
+
       ),
       body: SafeArea(
         child: Padding(
@@ -61,6 +95,7 @@ class _HomeState extends State<Home> {
           child: _currentPage,
         ),
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         items: [
@@ -70,7 +105,8 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            title: Text('List'),
+            title: Text('List View'),
+
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble_outline),

@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sgparking/control/auth.dart';
+import 'package:sgparking/control/login.dart';
 import 'package:sgparking/views/email_verification_page.dart';
 import 'package:sgparking/views/help_page.dart';
+import 'package:sgparking/views/login_page.dart';
 import 'home.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -201,7 +203,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) =>
-                                  Help(
+                                  LoginPage(
                                     // TODO do email verification via google maybe
 //                            MaterialPageRoute(builder: (context) => EmailVerificationPage(
                                   )

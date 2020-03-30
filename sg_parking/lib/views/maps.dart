@@ -137,9 +137,7 @@ class _MapsState extends State<Maps> {
   Widget build(BuildContext context) {
     final Data data4 = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Maps Sample App'),
-      ),
+
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.location_searching),
           onPressed: () async {

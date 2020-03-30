@@ -148,22 +148,22 @@ class _HomePageState extends State<SearchMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Carpark Search'),
-          backgroundColor: Colors.blue[900],
-          actions: <Widget>[
-            IconButton(
-              tooltip: 'report',
-              color: Colors.red[900],
-              splashColor: Colors.redAccent,
-              icon: Icon(Icons.report),
-              onPressed: () => _openReportPage(
-                context: context,
-                fullscreenDialog: true,
-              ),
-            ),
-          ],
-        ),
+//        appBar: AppBar(
+//          title: Text('      Carpark Search'),
+//          backgroundColor: Colors.blue[900],
+//          actions: <Widget>[
+//            IconButton(
+//              tooltip: 'report',
+//              color: Colors.red[900],
+//              splashColor: Colors.redAccent,
+//              icon: Icon(Icons.report),
+//              onPressed: () => _openReportPage(
+//                context: context,
+//                fullscreenDialog: true,
+//              ),
+//            ),
+//          ],
+//        ),
         body: Center(
           child: Container(
             child: ListView.builder(
