@@ -15,18 +15,28 @@ class _ContactUsPageState extends State<ContactUs> {
   final subjectText = TextEditingController();
   final descriptionText = TextEditingController();
 
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameText.dispose();
+    emailText.dispose();
+    contactText.dispose();
+    subjectText.dispose();
+    descriptionText.dispose();
+    super.dispose();
+  }
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
+            color: Colors.white, //change your color here
           ),
           title: Text('Help Center', style: TextStyle(
-              color: Colors.black
+              color: Colors.white
           )),
 
           centerTitle: true,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.orange,
         ),
         body: SingleChildScrollView(
             child: Container(
@@ -37,6 +47,17 @@ class _ContactUsPageState extends State<ContactUs> {
                     Text(
                         'Contact Us', style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 22)
+                    ),
+                    SizedBox(
+                        height: 10
+                    ),
+                    Text(
+                      'Please enter your personal particulars and your enquries below',
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 16,
+                          color: Colors.grey),
+                      textAlign: TextAlign.center,
                     ),
                     SizedBox(
                         height: 20
@@ -132,12 +153,9 @@ class _ContactUsPageState extends State<ContactUs> {
                       decoration: InputDecoration(
                           hintText: "Tell us more..",
                           hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
-                          hasFloatingPlaceholder: true),
+                          hasFloatingPlaceholder: true
+                      ),
                     ),
-                    SizedBox(
-                        height: 20
-                    ),
-
                     Align(
                       alignment: Alignment.center,
                       child: FlatButton(
@@ -152,6 +170,9 @@ class _ContactUsPageState extends State<ContactUs> {
                             sendClicked();
                           }
                       ),
+                    ),
+                    SizedBox(
+                      height: 20,
                     )
                   ],
                 ))

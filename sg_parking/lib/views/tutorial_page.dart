@@ -39,11 +39,14 @@ class TutorialState extends State<Tutorial> {
         .height;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
         title: Text(
             'Tutorial', style: TextStyle(
-            color: Colors.black)),
+            color: Colors.white)),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.orange,
       ),
       body: Container(
         child: Column(
@@ -54,7 +57,7 @@ class TutorialState extends State<Tutorial> {
               height: screenHeight/1.5,
               initialPage: 0,
               enlargeCenterPage: true,
-              autoPlay: true,
+              autoPlay: false,
               reverse: false,
               enableInfiniteScroll: false,
               autoPlayAnimationDuration: Duration(milliseconds: 2000),

@@ -23,19 +23,26 @@ class _HomeState extends State<Home> {
   List _listPages = List();
   Widget _currentPage;
 
-  List<String> _listTitle = ['Map', 'List View', 'Help Center'];
+   List<String> _listTitle = ['Map', 'List View', 'Help Center'];
 
   void _openReportPage({BuildContext context, bool fullscreenDialog = false}) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        fullscreenDialog: fullscreenDialog,
         builder: (context) => Report(),
       ),
     );
     // Navigator.pushNamed(context, '/about');
   }
-
+  void _openTutorialPage ({BuildContext context, bool fullscreenDialog = false})
+  {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Tutorial(),
+      ),
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -61,7 +68,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_listTitle[_currentIndex], style: TextStyle(
-            color: Colors.black
+            color: Colors.white
         )),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context,false),
@@ -72,21 +79,34 @@ class _HomeState extends State<Home> {
         automaticallyImplyLeading: true,
 
         centerTitle: true,
-        backgroundColor: Colors.lightBlueAccent,
-          actions: <Widget>[
+        backgroundColor: Colors.orange,
+        actions: <Widget>[
+          if(_currentIndex == 0 || _currentIndex == 1)
             IconButton(
               tooltip: 'report',
-              color: Colors.red[900],
+              color: Colors.white,
               splashColor: Colors.redAccent,
-              icon: Icon(Icons.report),
-              onPressed: () => _openReportPage(
-                context: context,
-                fullscreenDialog: true,
-              ),
+              icon: Icon(Icons.warning),
+
+              onPressed: () =>
+                  _openReportPage(
+                    context: context,
+                    fullscreenDialog: true,
+                  ),
             ),
-
-
-          ],
+          if(_currentIndex == 2)
+            IconButton(
+              tooltip: 'tutorial',
+              color: Colors.white,
+              splashColor: Colors.redAccent,
+              icon: Icon(Icons.help),
+              onPressed: () =>
+                  _openTutorialPage(
+                    context: context,
+                    fullscreenDialog: true,
+                  ),
+            )
+        ],
 
       ),
       body: SafeArea(

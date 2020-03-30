@@ -15,21 +15,26 @@ class Help extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
               height: 20,
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                        'Frequently Asked Questions (FAQ)', style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 22)
-                    )))
-            ,
+            Text(
+                'Frequently Asked Questions (FAQ)', style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 22)
+            ),
+
             SizedBox(
               height: 10,
+            ),
+            Text(
+              'Some commonly asked questions by our users',
+              style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: 16,
+                  color: Colors.grey),
+              textAlign: TextAlign.center,
             ),
             Container(
               height: screenHeight / 2.2,
@@ -40,49 +45,42 @@ class Help extends StatelessWidget {
                 itemCount: data.length,
               ),
             ),
+            SizedBox(
+              height: 40,
+            ),
+            Text(
+                'Contact Us', style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 22)
+            ),
 
-
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'If you have any other enquiries, please feel free to contact us by clicking the button below',
+              style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: 16,
+                  color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
             SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Column(children: <Widget>[
-                Align(
-                    alignment: Alignment.topLeft,
-                    child:
-                    Text(
-                        'Contact Us', style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 22)
-                    )
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                    'If you have any other enquiries, comments or feedback, click the button below to contact us.'
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: FlatButton(
-                      color: Color(0xFF4B9DFE),
-                      textColor: Colors.white,
-                      padding: EdgeInsets.only(
-                          left: 20, right: 20, top: 15, bottom: 15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Text("Contact Us"),
-                      onPressed: () {
-                        contactUsClicked(context);
-                      },
-                    )
-                ),
-
-              ],
-              ),
+            FlatButton(
+              color: Color(0xFF4B9DFE),
+              textColor: Colors.white,
+              padding: EdgeInsets.only(
+                  left: 20, right: 20, top: 15, bottom: 15),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              child: Text("Contact Us"),
+              onPressed: () {
+                contactUsClicked(context);
+              },
+            ),
+            SizedBox(
+              height: 20,
             ),
           ],
         ),

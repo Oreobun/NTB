@@ -9,23 +9,20 @@ class Report extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appTitle = 'Report';
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-            automaticallyImplyLeading: true,
-            //`true` if you want Flutter to automatically add Back Button when needed,
-            //or `false` if you want to force your own back button every where
-            title: Text(appTitle),
-            leading: IconButton(icon:Icon(Icons.arrow_back),
-              onPressed:() => Navigator.pop(context, false),
-            )
-
+          iconTheme: IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          title: Text(
+              appTitle, style: TextStyle(
+              color: Colors.white)),
+          centerTitle: true,
+          backgroundColor: Colors.orange,
 
         ),
         body: MyCustomForm(),
-      ),
-    );
+      );
   }
 }
 
@@ -55,6 +52,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     // Clean up the controller when the widget is disposed.
     myController.dispose();
     myController2.dispose();
+    final myController3 = TextEditingController();
     super.dispose();
   }
 
@@ -62,67 +60,137 @@ class MyCustomFormState extends State<MyCustomForm> {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            controller: myController3,
-            decoration: InputDecoration(
-                labelText: 'Name'
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please fill in your name';
-              }
-              return null;
-            },
+        key: _formKey,
+        child: Container(
+          margin: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                  height: 10
+              ),
+              Text(
+                'Please further describe in detail opf the carpark of which you would like to report',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontSize: 16,
+                    color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                  height: 20
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                    'Name',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18)
+                ),
+              ),
+              TextFormField(
+                controller: myController3,
+                decoration: InputDecoration(
+                    hintText: "Enter Name..",
+                    hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
+                    hasFloatingPlaceholder: true,
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please fill in your name';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                  height: 20
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                    'Subject',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18)
+                ),
+              ),
+              TextFormField(
+                controller: myController,
+                maxLength: 100,
+                maxLines: 2,
+                textAlign: TextAlign.left,
+                decoration: InputDecoration(
+                  hintText: "Enter a Subject..",
+                  hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
+                  hasFloatingPlaceholder: true,
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please fill in the subject';
+                  }
+                  return null;
+                },
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                    'Description',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18)
+                ),
+              ),
+              TextFormField(
+                controller: myController2,
+                maxLength: 200,
+                maxLines: null,
+                minLines: 3,
+                textAlign: TextAlign.left,
+                decoration: InputDecoration(
+                  hintText: "Tell us more..",
+                  hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic, fontSize: 15),
+                  hasFloatingPlaceholder: true,
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please fill in the body';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                  height: 20
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: FlatButton(
+                    child: Text("Send"),
+                    color: Color(0xFF4B9DFE),
+                    textColor: Colors.white,
+                    padding: EdgeInsets.only(
+                        left: 20, right: 20, top: 15, bottom: 15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    onPressed: () {
+                      sendClicked();
+                    }
+                ),
+              )
+            ],
           ),
-          TextFormField(
-            controller: myController,
-            decoration: InputDecoration(
-                labelText: 'Subject'
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please fill in the subject';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: myController2,
-            decoration: InputDecoration(
-                labelText: 'Body'
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please fill in the body';
-              }
-              return null;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              onPressed: () {
-                // Validate returns true if the form is valid, or false
-                // otherwise.
-                if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a Snackbar.
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Email sent')));
-                  String subject = myController.text;
-                  String body = myController2.text;
-                  String name = myController3.text;
-                  sendReport.sendReportDetails(subject,body,name);
-                }
-              },
-              child: Text('Send email'),
-            ),
-          ),
-        ],
-      ),
+        )
     );
+  }
+  void sendClicked(){
+    if (_formKey.currentState.validate()) {
+      // If the form is valid, display a Snackbar.
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Email sent')));
+      String subject = myController.text;
+      String body = myController2.text;
+      String name = myController3.text;
+      sendReport.sendReportDetails(subject, body, name);
+      Navigator.pop(context);
+    }
   }
 }

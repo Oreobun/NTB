@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sgparking/control/login.dart';
 import 'package:sgparking/control/wrapper.dart';
+import 'package:sgparking/views/contact_us_page.dart';
 import 'package:sgparking/views/maps.dart';
 import 'package:sgparking/views/tutorial_page.dart';
 import 'control/auth.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: Home(),
     );
   }
 
