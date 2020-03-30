@@ -255,7 +255,7 @@ class _MapsState extends State<Maps> {
 
   }
   void updateMarkerAndCircle(Position newLocalData) { //takes new location data and image
-    LatLng latlng = new LatLng(1.340165306, 103.675497298); // testing
+    LatLng latlng = new LatLng(newLocalData.latitude, newLocalData.longitude); // testing
 
 //    LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);//LatLng(newLocalData.latitude, newLocalData.longitude);
     _controller.moveCamera(CameraUpdate.newCameraPosition(new CameraPosition(
@@ -304,7 +304,7 @@ class _MapsState extends State<Maps> {
 
   void updateMarkerAndCircle2(LatLng input) { //takes new location data and image
 
-    LatLng latlng = new LatLng(1.340165306, 103.675497298); // testing
+    LatLng latlng = new LatLng(input.latitude, input.longitude); // testing
 
 //    LatLng latlng = input;//LatLng(newLocalData.latitude, newLocalData.longitude);
     setState(() {

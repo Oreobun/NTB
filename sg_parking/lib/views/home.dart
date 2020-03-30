@@ -61,12 +61,6 @@ class _HomeState extends State<Home> {
           child: _currentPage,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.red[600],
-        child: Icon(Icons.location_on),
-        onPressed: () {navigateToSubPage(context);},
-      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         items: [
