@@ -184,7 +184,6 @@ class _HomePageState extends State<SearchMap> {
         child: TextField(
           decoration: InputDecoration(
               hintText: 'Search...',
-              suffixText: 'sort',
               suffixIcon: IconButton(
               onPressed: () => _openPageSort(
                 context: context,
@@ -194,7 +193,6 @@ class _HomePageState extends State<SearchMap> {
               icon: Icon(Icons.sort),
                 tooltip: 'sort',
             ),
-              prefixText: 'filter             ',
               prefixIcon: IconButton(
                 onPressed: () => _openPageFilter(
                   context: context,
@@ -225,62 +223,91 @@ class _HomePageState extends State<SearchMap> {
   _listItem(index) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.only(top: 32.0, bottom: 32.0, left: 16.0, right: 16.0),
+        padding: const EdgeInsets.only(
+            top: 20.0, bottom: 20.0, left: 16.0, right: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
             Text(
-             'Location = ' + _notesForDisplay[index].address  ,
+              _notesForDisplay[index].address,
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey.shade900
+                  color: Colors.grey.shade900,
               ),
             ),
-            Text(
-              'Distance = '+ _notesForDisplay[index].carParkDecks.toString() + 'm' ,
-              style: TextStyle(
-                  color: Colors.grey.shade800
-              ),
+            SizedBox(
+              height: 10,
             ),
-            Text(
-              'Gantry height = '+ _notesForDisplay[index].gantryHeight.toString() + 'm' ,
-              style: TextStyle(
-                  color: Colors.grey.shade800
-              ),
-            ),
-            Text(
-              'Lots available = ' + _notesForDisplay[index].availableLots.toString(),
-              style: TextStyle(
-                  color:  _notesForDisplay[index].availableLots == -1 ? Colors.red : _notesForDisplay[index].availableLots/_notesForDisplay[index].totalLots < 0.7 ? ((_notesForDisplay[index].availableLots/_notesForDisplay[index].totalLots < 0.3) )? Colors.red :Colors.orange : Colors.green
-              ),
-            ),
-            Text(
-              'Lot type = ' + _notesForDisplay[index].carParkType + '\nParking system = ' + _notesForDisplay[index].typeOfParkingSystem+ '\nShort term parking = ' + _notesForDisplay[index].shortTermParking,
-              style: TextStyle(
-                  color: Colors.grey.shade800
-              ),
-            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Distance: ' +
+                          _notesForDisplay[index].carParkDecks.toString() +
+                          'm',
+                      style: TextStyle(
+                          color: Colors.grey.shade800
+                      ),
+                    ),
+                    Text(
+                      'Gantry height: ' +
+                          _notesForDisplay[index].gantryHeight.toString() +
+                          'm',
+                      style: TextStyle(
+                          color: Colors.grey.shade800
+                      ),
+                    ),
+                    Text(
+                      'Lots available: ' +
+                          _notesForDisplay[index].availableLots.toString(),
+                      style: TextStyle(
+                          color: _notesForDisplay[index].availableLots == -1
+                              ? Colors.red
+                              : _notesForDisplay[index].availableLots /
+                              _notesForDisplay[index].totalLots < 0.7
+                              ? ((_notesForDisplay[index].availableLots /
+                              _notesForDisplay[index].totalLots < 0.3))
+                              ? Colors.red
+                              : Colors.orange
+                              : Colors.green
+                      ),
+                    ),
+                    Text(
+                      'Lot type: ' + _notesForDisplay[index].carParkType +
+                          '\nParking system = ' +
+                          _notesForDisplay[index].typeOfParkingSystem +
+                          '\nShort term parking = ' +
+                          _notesForDisplay[index].shortTermParking,
+                      style: TextStyle(
+                          color: Colors.grey.shade800
+                      ),
+                    ),
+                  ],
+                ),
 
-              ButtonBar(
-                children: <Widget>[
-                  RaisedButton(
-                    color: Colors.blueAccent,
-                    child: const Text('Get direction'),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
-                    textColor: Colors.white,
+                Container(
+                  width: 40,
+                  height: 40,
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.blueAccent,
+                    child: Icon(Icons.navigation),
                     onPressed: () {
-                      navigateToSubPage(context, LatLng(_notesForDisplay[index].lat, _notesForDisplay[index].lng));
+                      navigateToSubPage(context, LatLng(
+                          _notesForDisplay[index].lat,
+                          _notesForDisplay[index].lng));
                     },
                   ),
-                ],
-              ),
-
+                ),
+              ],
+            ),
           ],
         ),
-
       ),
     );
   }
