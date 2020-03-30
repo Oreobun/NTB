@@ -51,6 +51,7 @@ class _MapsState extends State<Maps> {
 
     super.initState();
     setCustomMapPin();
+    getCurrentLocation();
   }
 
   Widget _showMarkers(_toggleMarker)  {
@@ -145,19 +146,12 @@ class _MapsState extends State<Maps> {
           child: Icon(Icons.location_searching),
           onPressed: () async {
             if (data4 != null) {
-              getCurrentLocation();
               while (true) {
                 getCurrentLocation2();
                 updateMarkerAndCircle2(source);
                 sendRequests(data4.initialLoc, source);
-
                 await new Future.delayed(const Duration(seconds: 1));
               }
-            }
-            else{
-              getCurrentLocation();
-
-//              sendRequests(_lastPos,_intialPos);
             }
           }),
       body: Stack(
