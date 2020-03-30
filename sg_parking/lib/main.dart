@@ -4,6 +4,7 @@ import 'package:sgparking/control/login.dart';
 import 'package:sgparking/control/wrapper.dart';
 import 'package:sgparking/views/contact_us_page.dart';
 import 'package:sgparking/views/maps.dart';
+import 'package:sgparking/views/sort_page.dart';
 import 'package:sgparking/views/tutorial_page.dart';
 import 'control/auth.dart';
 import 'entity/user.dart';

@@ -18,6 +18,7 @@ class Sort extends StatefulWidget {
 }
 
 class _SortState extends State<Sort> {
+  List<bool> isSelected = [true, false, false];
   List<String> _gratitudeList = List();
   String _selectedGratitude;
   int _radioGroupValue;
@@ -26,6 +27,24 @@ class _SortState extends State<Sort> {
   CarparkController carparkController = new CarparkController();
   List<CarparkInfo> _notes2 = new List<CarparkInfo>();
 
+  void _toggleButtonChanged(int index, List<CarparkInfo> test){
+    if(index == 0){
+      Comparator<CarparkInfo> lotsComparator0 = (a,b) => (a.carParkDecks).compareTo((b.carParkDecks));
+      test.sort(lotsComparator0);
+      print("test1");
+    }else if (index == 1){
+      Comparator<CarparkInfo> lotsComparator1 = (a,b) => (a.availableLots).compareTo((b.availableLots));
+      test.sort(lotsComparator1);
+      print("test2");
+    }
+    else if (index == 2){
+      Comparator<CarparkInfo> lotsComparator2 = (a,b) => a.gantryHeight.compareTo((b.gantryHeight));
+      test.sort(lotsComparator2);
+    }
+    _notes2 = test;
+    finishLoading = true;
+  }
+  /*
   void _radioOnChanged(int index, List<CarparkInfo> test)  {
     setState(() {
       _radioGroupValue = index;
@@ -59,7 +78,7 @@ class _SortState extends State<Sort> {
       _notes2 = test;
       finishLoading = true;
     });
-  }
+  }*/
 
   @override
   void initState() {
@@ -75,7 +94,14 @@ class _SortState extends State<Sort> {
     final Data data4 = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sort'),
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        title: Text(
+            'Sort', style: TextStyle(
+            color: Colors.white)),
+        centerTitle: true,
+        backgroundColor: Colors.orange,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
@@ -92,9 +118,85 @@ class _SortState extends State<Sort> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
+            padding: EdgeInsets.all(20),
+          child: Column(
             children: <Widget>[
+              Text(
+                'Sort list according to:',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontSize: 16,
+                    color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ToggleButtons(
+                    children: <Widget>[
+                      Container(
+                          width: 110,
+                          height: 70,
+                          padding: EdgeInsets.all(4),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(Icons.arrow_forward),
+                                SizedBox(height: 1),
+                                Text('Distance',textAlign: TextAlign.center),
+                              ]
+                          )
+                      ),
+                      Container(
+                          width: 110,
+                          height: 70,
+                          padding: EdgeInsets.all(4),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(Icons.directions_car),
+                                SizedBox(height: 1),
+                                Text('Available Lots',textAlign: TextAlign.center),
+                              ]
+                          )
+                      ),
+                      Container(
+                          width: 110,
+                          height: 70,
+                          padding: EdgeInsets.all(4),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(Icons.looks_two),
+                                SizedBox(height: 1),
+                                Text('Gantry Height',textAlign: TextAlign.center),
+                              ]
+                          )
+                      ),
+                    ],
+                    onPressed: (int index) {
+                      setState(() {
+                        for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
+                          if (buttonIndex == index) {
+                            isSelected[buttonIndex] = true;
+                          } else {
+                            isSelected[buttonIndex] = false;
+                          }
+                        }
+                      });
+                      _toggleButtonChanged(index, data4.carparkList);
+                    },
+                    isSelected: isSelected,
+                  ),
+                ],
+
+                /*children: <Widget>[
               Column(
                 children: <Widget>[
                   Radio(
@@ -117,8 +219,10 @@ class _SortState extends State<Sort> {
                   Text('GantryHeight'),
                 ],
               ),
+            ],*/
+              ),
             ],
-          ),
+          )
         ),
       ),
     );

@@ -62,7 +62,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     return Form(
         key: _formKey,
         child: Container(
-          margin: EdgeInsets.only(top: 20),
+          margin: EdgeInsets.only(top: 20, bottom: 20),
           padding: EdgeInsets.only(left: 20, right: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +153,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please fill in the body';
+                    return 'Please fill in the description';
                   }
                   return null;
                 },

@@ -73,20 +73,18 @@ class _HomeState extends State<Home> {
         leading: GestureDetector(
           onTap: () => Navigator.pop(context,false),
           child: Icon(
-            Icons.backspace,  // add custom icons also
+            Icons.exit_to_app,  // add custom icons also
           ),
         ),
-        automaticallyImplyLeading: true,
-
         centerTitle: true,
         backgroundColor: Colors.orange,
         actions: <Widget>[
-          if(_currentIndex == 0 || _currentIndex == 1)
+          if(_currentIndex == 1)
             IconButton(
               tooltip: 'report',
               color: Colors.white,
               splashColor: Colors.redAccent,
-              icon: Icon(Icons.warning),
+              icon: Icon(Icons.error_outline),
 
               onPressed: () =>
                   _openReportPage(
@@ -99,7 +97,7 @@ class _HomeState extends State<Home> {
               tooltip: 'tutorial',
               color: Colors.white,
               splashColor: Colors.redAccent,
-              icon: Icon(Icons.help),
+              icon: Icon(Icons.help_outline),
               onPressed: () =>
                   _openTutorialPage(
                     context: context,
@@ -120,16 +118,16 @@ class _HomeState extends State<Home> {
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
+            icon: Icon(Icons.location_on),
             title: Text('Map'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            title: Text('List View'),
+            title: Text('Search'),
 
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
+            icon: Icon(Icons.question_answer),
             title: Text('Help'),
           ),
         ],
