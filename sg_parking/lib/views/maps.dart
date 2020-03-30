@@ -91,23 +91,18 @@ class _MapsState extends State<Maps> {
                           zIndex: 2,
                           flat: true,
                           onTap: () async {
+
+                            destroyRoute();
                             Position location = await Geolocator()  //constructing geolocator object to call current position
                                 .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);  //constructing geolocator object to call current position
-                            setState(() {
+                            LatLng coordinates2 = LatLng(i.lat,i.lng);
+                            print(coordinates2);
+                            print(source);
+                            print(location);
+                            sendRequests(coordinates2, LatLng(location.latitude,location.longitude));
+                            print("testu");
+                            //constructing geolocator object to call current position
 
-
-                              LatLng coordinates2 = LatLng(i.lat,i.lng);
-
-                              source = LatLng(location.latitude, location.longitude);
-                              print(coordinates2);
-                              print(source);
-                              print(_initialLocation);
-//                              sendRequests(coordinates2, _initialLocation);
-                              sendRequests(coordinates2, source); // use this for real data
-
-
-                              print("testu");
-                            });  //constructing geolocator object to call current position
                           },
 //                          visible: true,
                           anchor: Offset(0.4, 0.4),
@@ -196,7 +191,11 @@ class _MapsState extends State<Maps> {
     );
   }
 
-
+  void destroyRoute(){
+    setState((){
+      _polyLines.clear();
+    });
+  }
 
   void setCustomMapPin() async {
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
