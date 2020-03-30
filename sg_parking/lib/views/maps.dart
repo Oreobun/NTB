@@ -94,12 +94,12 @@ class _MapsState extends State<Maps> {
 
                               LatLng coordinates2 = LatLng(i.lat,i.lng);
 
-//                              source = LatLng(location.latitude, location.longitude);
+                              source = LatLng(location.latitude, location.longitude);
                               print(coordinates2);
                               print(source);
                               print(_initialLocation);
-                              sendRequests(coordinates2, _initialLocation);
-//                              sendRequests(coordinates2, source); use this for real data
+//                              sendRequests(coordinates2, _initialLocation);
+                              sendRequests(coordinates2, source); // use this for real data
 
 
                               print("testu");
@@ -192,7 +192,7 @@ class _MapsState extends State<Maps> {
         mapType: MapType.normal,
         polylines: _polyLines,
         initialCameraPosition: CameraPosition(
-          target: _intialPos,
+          target: source,
           zoom: 10.0,
         ),
       ),
@@ -254,18 +254,24 @@ class _MapsState extends State<Maps> {
     }
 
   }
-  void updateMarkerAndCircle(Position newLocalData) { //takes new location data and image
-    LatLng latlng = new LatLng(1.340165306, 103.675497298); // testing
+  void updateMarkerAndCircle(Position newLocalData) async { //takes new location data and image
+
+    Position locationUpdate = await Geolocator()  //constructing geolocator object to call current position
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      source = LatLng(locationUpdate.latitude, locationUpdate.longitude);
+    });
+//    LatLng latlng = new LatLng(1.340165306, 103.675497298); // testing
 
 //    LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);//LatLng(newLocalData.latitude, newLocalData.longitude);
     _controller.moveCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-        target: latlng,
+        target: source,
         tilt: 0,
         zoom: 12.00)));
     setState(() {
       _markers.add(Marker(
           markerId: MarkerId("home"),
-          position: latlng,
+          position: source,
           rotation: newLocalData.heading,
           draggable: false,
           zIndex: 2,
@@ -277,7 +283,7 @@ class _MapsState extends State<Maps> {
           radius: 3,
           zIndex: 1,
           strokeColor: Colors.blue,
-          center: latlng,
+          center: source,
           fillColor: Colors.blue.withAlpha(70));
     });
 
@@ -304,9 +310,9 @@ class _MapsState extends State<Maps> {
 
   void updateMarkerAndCircle2(LatLng input) { //takes new location data and image
 
-    LatLng latlng = new LatLng(1.340165306, 103.675497298); // testing
+//    LatLng latlng = new LatLng(1.340165306, 103.675497298); // testing
 
-//    LatLng latlng = input;//LatLng(newLocalData.latitude, newLocalData.longitude);
+    LatLng latlng = input;//LatLng(newLocalData.latitude, newLocalData.longitude);
     setState(() {
       _markers.add(Marker(
           markerId: MarkerId("home"),
