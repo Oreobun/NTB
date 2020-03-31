@@ -295,6 +295,7 @@ class _HomePageState extends State<SearchMap> {
                   width: 40,
                   height: 40,
                   child: FloatingActionButton(
+                    heroTag: "btn$index",
                     backgroundColor: Colors.blueAccent,
                     child: Icon(Icons.navigation),
                     onPressed: () {
