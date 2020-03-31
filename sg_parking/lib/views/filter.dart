@@ -30,9 +30,6 @@ class _SliderContainerState extends State<SliderContainer>{
     fontSize: 20,
   );
 
-  void _onClick() {
-
-  }
 
   void filterResult(List<CarparkInfo> notes, double dis, double hgt,
       double avail) {
@@ -75,12 +72,12 @@ class _SliderContainerState extends State<SliderContainer>{
               IconButton(
                 icon: Icon(Icons.check),
                 onPressed: () async {
-                  _onClick();
+                  filterResult(
+                      data4.carparkList, _distance, height, avail);
                   while (true) {
-                    filterResult(
-                        data4.carparkList, _distance, height, avail);
-                    Navigator.pop(context, _notes3);
-
+                    if (finishLoading == true) {
+                      Navigator.pop(context, _notes3);
+                    }
                     await new Future.delayed(const Duration(seconds: 1));
                   }
                 },

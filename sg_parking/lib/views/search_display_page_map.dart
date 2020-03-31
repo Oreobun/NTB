@@ -124,7 +124,9 @@ class _HomePageState extends State<SearchMap> {
     );
 
     if (_notes3 != null) {
-      setState(() => testList = List.from(_notes3));
+      setState(() => test = _notes3);
+      print("the returning list has length:");
+      print(_notes3.length);
     }
   }
 
@@ -236,7 +238,6 @@ class _HomePageState extends State<SearchMap> {
   }
 
   _listItem(index) {
-    test = List.from(testList);
     print(test.length);
     return (test.contains(_notesForDisplay[index].iId) == false) ?
      new Card(
@@ -328,6 +329,6 @@ class _HomePageState extends State<SearchMap> {
           ],
         ),
       ),
-    ) : new Card();
+    ) : new Row();
   }
 }
