@@ -19,7 +19,7 @@ class _SliderContainerState extends State<SliderContainer>{
   static double _lowerValAvail= 0.0;
   static double _upperValAvail= 1000.0;
   double avail = 0;
-  List<CarparkInfo> _notes3 = new List<CarparkInfo>();
+  List<int> _notes3 = [];
   CarparkController carparkController = new CarparkController();
   bool finishLoading = false;
   final headingTextStyle = TextStyle(
@@ -36,11 +36,23 @@ class _SliderContainerState extends State<SliderContainer>{
 
   void filterResult(List<CarparkInfo> notes, double dis, double hgt,
       double avail) {
-    notes.removeWhere((item) => item.gantryHeight < hgt);
-    notes.retainWhere((item) => item.carParkDecks > dis);
-    notes.removeWhere((item) => item.availableLots < avail);
+
+    for (var i in notes) {
+      if (i.gantryHeight < hgt && hgt != 0 ){
+        _notes3.add(i.iId);
+        continue;
+      }
+      if((i.carParkDecks > dis*1000.0) && dis != 0 ){
+        _notes3.add(i.iId);
+        continue;
+      }
+      if (i.availableLots < avail && avail != 0){
+        _notes3.add(i.iId);
+        continue;
+      }
+    }
     finishLoading = true;
-    _notes3 = notes;
+
   }
 
   @override
@@ -224,7 +236,7 @@ class _SliderContainerState extends State<SliderContainer>{
                       ),
                     ),
                     Text(
-                      'Minimum percentage(%) of carpark availability',
+                      'Minimum available slots',
                       style: TextStyle(
                           fontStyle: FontStyle.italic,
                           fontSize: 16,
@@ -232,11 +244,11 @@ class _SliderContainerState extends State<SliderContainer>{
                       textAlign: TextAlign.center,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 12.0),
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 8.0),
                       child: Row(
                         children: <Widget>[
                           Text(
-                            _lowerValAvail.toString() + ' %',
+                            _lowerValAvail.toString() ,
                           ),
                           Expanded(
                             flex: 2,
@@ -266,7 +278,7 @@ class _SliderContainerState extends State<SliderContainer>{
                             ),
                           ),
                           Text(
-                            _upperValAvail.toString() + ' %',
+                            _upperValAvail.toString() ,
                           ),
                         ],
                       ),
@@ -275,7 +287,7 @@ class _SliderContainerState extends State<SliderContainer>{
                   ],
                 ),
               ),
-              /*Row(
+              Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     FlatButton(
@@ -283,7 +295,7 @@ class _SliderContainerState extends State<SliderContainer>{
                       color: Color(0xFF4B9DFE),
                       textColor: Colors.white,
                       padding: EdgeInsets.only(
-                          left: 38, right: 38, top: 15, bottom: 15),
+                          left: 38, right: 38, top: 12, bottom: 12),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),
                       onPressed: () async {
@@ -302,7 +314,7 @@ class _SliderContainerState extends State<SliderContainer>{
                       color: Color(0xFF696969),
                       textColor: Colors.white,
                       padding: EdgeInsets.only(
-                          left: 38, right: 38, top: 15, bottom: 15),
+                          left: 38, right: 38, top: 12, bottom: 12),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),
                       onPressed: () {
@@ -311,7 +323,7 @@ class _SliderContainerState extends State<SliderContainer>{
                     )
 
                   ]
-              )*/
+              )
             ],
           ),
         ),

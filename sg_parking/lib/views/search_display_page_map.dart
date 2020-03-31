@@ -5,6 +5,7 @@
 import 'dart:async';
 //import 'dart:html';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgparking/entity/carpark.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,9 @@ class _HomePageState extends State<SearchMap> {
   CarparkController carparkController = new CarparkController();
   DistanceController distanceGet = new DistanceController();
   List<double> carparkDistance;
-
+  var source;
+  static List<int> test;
+  List<int> testList =[];
   loadJson() async {
     String data = await rootBundle.loadString('assets/carpark_data.json');
     var jsonResult = json.decode(data);
@@ -107,7 +110,7 @@ class _HomePageState extends State<SearchMap> {
   void _openPageFilter(
       {BuildContext context, bool fullscreenDialog = false, List<CarparkInfo> input}) async {
     final data = Data(carparkList: input);
-    final List<CarparkInfo> _notes3 = await Navigator.push(
+    final List<int> _notes3 = await Navigator.push(
       context,
       MaterialPageRoute(
         fullscreenDialog: fullscreenDialog,
@@ -120,22 +123,34 @@ class _HomePageState extends State<SearchMap> {
       ),
     );
 
-
     if (_notes3 != null) {
-      setState(() {
-        _notesForDisplay = _notes3;
-        _notes = _notes3;
-      });
+      setState(() => testList = List.from(_notes3));
     }
   }
 
+  void slotDistance()async{
+    Position locationUpdate = await Geolocator()  //constructing geolocator object to call current position
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      source = LatLng(locationUpdate.latitude, locationUpdate.longitude);
+    });
+
+  }
+
   @override
-  void initState() {
-     print('12345678');
-     distanceGet.getDistance();
+  void initState()  {
+    test = [];
+    slotDistance();
     carparkController.fetchNotes(sortResult).then((value) {
       setState(() {
         _notes.addAll(value);
+        for (var i in _notes) {
+          Future<double> distanceInMeters = Geolocator().distanceBetween(source.latitude, source.longitude, i.lat, i.lng);
+          distanceInMeters.then((result){
+            i.carParkDecks = result.toInt();
+          });
+        }
+
         _notesForDisplay = _notes;
       });
     });
@@ -221,7 +236,10 @@ class _HomePageState extends State<SearchMap> {
   }
 
   _listItem(index) {
-    return Card(
+    test = List.from(testList);
+    print(test.length);
+    return (test.contains(_notesForDisplay[index].iId) == false) ?
+     new Card(
       child: Padding(
         padding: const EdgeInsets.only(
             top: 20.0, bottom: 20.0, left: 16.0, right: 16.0),
@@ -310,6 +328,6 @@ class _HomePageState extends State<SearchMap> {
           ],
         ),
       ),
-    );
+    ) : new Card();
   }
 }
