@@ -31,11 +31,9 @@ class _SortState extends State<Sort> {
     if(index == 0){
       Comparator<CarparkInfo> lotsComparator0 = (a,b) => (a.carParkDecks).compareTo((b.carParkDecks));
       test.sort(lotsComparator0);
-      print("test1");
     }else if (index == 1){
       Comparator<CarparkInfo> lotsComparator1 = (a,b) => (a.availableLots).compareTo((b.availableLots));
       test.sort(lotsComparator1);
-      print("test2");
     }
     else if (index == 2){
       Comparator<CarparkInfo> lotsComparator2 = (a,b) => a.gantryHeight.compareTo((b.gantryHeight));
@@ -138,7 +136,7 @@ class _SortState extends State<Sort> {
                   ToggleButtons(
                     children: <Widget>[
                       Container(
-                          width: 110,
+                          width: 100,
                           height: 70,
                           padding: EdgeInsets.all(4),
                           child: Column(
@@ -152,7 +150,7 @@ class _SortState extends State<Sort> {
                           )
                       ),
                       Container(
-                          width: 110,
+                          width: 100,
                           height: 70,
                           padding: EdgeInsets.all(4),
                           child: Column(
@@ -166,7 +164,7 @@ class _SortState extends State<Sort> {
                           )
                       ),
                       Container(
-                          width: 110,
+                          width: 100,
                           height: 70,
                           padding: EdgeInsets.all(4),
                           child: Column(
