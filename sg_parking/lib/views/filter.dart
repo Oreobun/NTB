@@ -62,130 +62,68 @@ class _SliderContainerState extends State<SliderContainer>{
         .settings
         .arguments;
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.white, //change your color here
-        ),
-        title: Text(
-            'FIlter', style: TextStyle(
-            color: Colors.white)),
-        centerTitle: true,
-        backgroundColor: Colors.orange,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: () async {
-              while (true) {
-                filterResult(
-                    data4.carparkList, _distance, height, avail);
-                Navigator.pop(context, _notes3);
+          appBar: AppBar(
+            iconTheme: IconThemeData(
+              color: Colors.white, //change your color here
+            ),
+            title: Text(
+                'FIlter', style: TextStyle(
+                color: Colors.white)),
+            centerTitle: true,
+            backgroundColor: Colors.orange,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.check),
+                onPressed: () async {
+                  _onClick();
+                  while (true) {
+                    filterResult(
+                        data4.carparkList, _distance, height, avail);
+                    Navigator.pop(context, _notes3);
 
-                await new Future.delayed(const Duration(seconds: 1));
-              }
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.only(top: 20, bottom: 20),
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Distance", style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 22)
-                      ),
-                    ),
-                    Text(
-                      'Search distance(km) from current location',
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 16,
-                          color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(
-                            _lowerValDist.toString()+' km',
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-                                valueIndicatorColor: Colors.blueAccent,
-                                valueIndicatorTextStyle: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              child: Slider(
-                                  min: _lowerValDist,
-                                  //_lowerValDist,
-                                  max: _upperValDist,
-                                  //_upperValDist,
-                                  value: _distance,
-                                  divisions: 100,
-                                  label: _distance.toStringAsFixed(2),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _distance = val;
-                                      print(getDistance());
-                                    });
-                                  }
-                              ),
-                            ),
-                          ),
-
-                          Text(
-                            _upperValDist.toString()+' km',
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  ],
-                ),
+                    await new Future.delayed(const Duration(seconds: 1));
+                  }
+                },
               ),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Gantry Height", style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 22)
+            ],
+          ),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Container(
+            margin: EdgeInsets.only(top: 20, bottom: 20),
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            "Distance", style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22)
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Carparks minimum gantry height(m)',
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 16,
-                          color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            _lowerValPrice.toString() + ' m',
-                          ),
-                          Expanded(
+                      Text(
+                        'Search distance(km) from current location',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 16,
+                            color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Text(
+                              _lowerValDist.toString() + ' km',
+                            ),
+                            Expanded(
                               flex: 2,
                               child: SliderTheme(
                                 data: SliderTheme.of(context).copyWith(
@@ -196,98 +134,163 @@ class _SliderContainerState extends State<SliderContainer>{
                                   ),
                                 ),
                                 child: Slider(
-                                    min: _lowerValPrice,
-                                    // _lowerValPrice,
-                                    max: _upperValPrice,
-                                    // _upperValPrice,
+                                    min: _lowerValDist,
+                                    //_lowerValDist,
+                                    max: _upperValDist,
+                                    //_upperValDist,
+                                    value: _distance,
                                     divisions: 100,
-                                    value: height,
-                                    label: height.toStringAsFixed(2),
+                                    label: _distance.toStringAsFixed(2),
                                     onChanged: (val) {
                                       setState(() {
-                                        height = val;
-                                        print(getPrice());
+                                        _distance = val;
+                                        print(getDistance());
                                       });
                                     }
                                 ),
-
-                              )
-                          ),
-                          Text(
-                            _upperValPrice.toString() + ' m',
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Availability",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 22)
-                      ),
-                    ),
-                    Text(
-                      'Minimum available slots',
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 16,
-                          color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 8.0),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            _lowerValAvail.toString() ,
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-                                valueIndicatorColor: Colors.blueAccent,
-                                valueIndicatorTextStyle: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              child: Slider(
-                                  min: _lowerValAvail,
-                                  //_lowerValAvail,
-                                  max: _upperValAvail,
-                                  // _upperValAvail,
-                                  value: avail,
-                                  label: avail.toStringAsFixed(2),
-                                  divisions: 100,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      avail = val;
-                                      print(getAvail());
-                                    });
-                                  }
                               ),
                             ),
-                          ),
-                          Text(
-                            _upperValAvail.toString() ,
-                          ),
-                        ],
-                      ),
-                    ),
 
-                  ],
+                            Text(
+                              _upperValDist.toString() + ' km',
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
                 ),
-              ),
-              Row(
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            "Gantry Height", style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22)
+                        ),
+                      ),
+                      Text(
+                        'Carparks minimum gantry height(m)',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 16,
+                            color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              _lowerValPrice.toString() + ' m',
+                            ),
+                            Expanded(
+                                flex: 2,
+                                child: SliderTheme(
+                                  data: SliderTheme.of(context).copyWith(
+                                    valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+                                    valueIndicatorColor: Colors.blueAccent,
+                                    valueIndicatorTextStyle: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  child: Slider(
+                                      min: _lowerValPrice,
+                                      // _lowerValPrice,
+                                      max: _upperValPrice,
+                                      // _upperValPrice,
+                                      divisions: 100,
+                                      value: height,
+                                      label: height.toStringAsFixed(2),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          height = val;
+                                          print(getPrice());
+                                        });
+                                      }
+                                  ),
+
+                                )
+                            ),
+                            Text(
+                              _upperValPrice.toString() + ' m',
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            "Availability",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 22)
+                        ),
+                      ),
+                      Text(
+                        'Minimum available slots',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 16,
+                            color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10.0, bottom: 8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              _lowerValAvail.toString(),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: SliderTheme(
+                                data: SliderTheme.of(context).copyWith(
+                                  valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+                                  valueIndicatorColor: Colors.blueAccent,
+                                  valueIndicatorTextStyle: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                child: Slider(
+                                    min: _lowerValAvail,
+                                    //_lowerValAvail,
+                                    max: _upperValAvail,
+                                    // _upperValAvail,
+                                    value: avail,
+                                    label: avail.toStringAsFixed(2),
+                                    divisions: 100,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        avail = val;
+                                        print(getAvail());
+                                      });
+                                    }
+                                ),
+                              ),
+                            ),
+                            Text(
+                              _upperValAvail.toString(),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+                /*Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     FlatButton(
@@ -323,8 +326,9 @@ class _SliderContainerState extends State<SliderContainer>{
                     )
 
                   ]
-              )
-            ],
+              )*/
+              ],
+            ),
           ),
         ),
       ),
