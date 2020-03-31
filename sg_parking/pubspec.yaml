@@ -18,9 +18,6 @@ environment:
 
 dependencies:
   flutter:
-    uses-material-design: true
-    assets:
-        - assets/Tutorial1.jpg
     sdk: flutter
   http: ^0.12.0+1
   carousel_slider: ^1.3.0
@@ -64,6 +61,13 @@ flutter:
   assets:
     - assets/car.png
     - assets/carpark_data.json
+    - assets/Tutorial1.jpg
+    - assets/Tutorial2.jpg
+    - assets/Tutorial3.jpg
+    - assets/Tutorial4.jpg
+    - assets/Tutorial5.jpg
+    - assets/Tutorial6.jpg
+
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

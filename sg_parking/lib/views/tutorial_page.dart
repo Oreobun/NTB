@@ -17,6 +17,11 @@ class TutorialState extends State<Tutorial> {
   int _current = 0;
   List imgList = [
     'assets/Tutorial1.jpg',
+    'assets/Tutorial2.jpg',
+    'assets/Tutorial3.jpg',
+    'assets/Tutorial4.jpg',
+    'assets/Tutorial5.jpg',
+    'assets/Tutorial6.jpg',
   ];
 
   List<T> map<T>(List list, Function handler) {
@@ -50,7 +55,7 @@ class TutorialState extends State<Tutorial> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             carouselSlider = CarouselSlider(
-              height: screenHeight/1.5,
+              height: screenHeight/1.3,
               initialPage: 0,
               enlargeCenterPage: true,
               autoPlay: false,
@@ -66,17 +71,21 @@ class TutorialState extends State<Tutorial> {
               items: imgList.map((imgUrl) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      margin: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Image.asset(
-                        imgUrl,
-                        fit: BoxFit.fill,
-                      ),
-                    );
+                    return
+                      Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
+                        margin: EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                        ),
+                        child: Image.asset(
+                          imgUrl,
+                          fit: BoxFit.fill,
+                        ),
+                      );
                   },
                 );
               }).toList(),
