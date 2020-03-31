@@ -18,24 +18,14 @@ class CarparkController {
 
   Future<List<CarparkInfo>> fetchNotes(int sortNum) async {
     // Sets up an API call to AWS Elastic Beanstalk
-//    var url = 'http://url';
-//    var response = await http.get(url);
+    var url = 'http://noturningbac-env.eba-qa2gpmhs.ap-southeast-1.elasticbeanstalk.com/api/get_carparks_info';
+    var response = await http.get(url);
 
-    String data = await rootBundle.loadString('assets/carpark_data.json');
-    var jsonResult = json.decode(data);
-    print('test result');
-    print(jsonResult);
+//    String data = await rootBundle.loadString('assets/carpark_data.json');
+    var jsonResult = json.decode(response.body);
     for (int i = 0; i < jsonResult.length; i++) {
       var result = CarparkInfo.fromJson(jsonResult[i]);
       notes.add(result);
-    }
-    Position location = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    for (int i = 0; i < notes.length; i++) {
-      Future<double> distanceInMeters = Geolocator().distanceBetween(location.latitude, location.longitude, notes[i].lat, notes[i].lng);
-      distanceInMeters.then((value){
-        notes[i].carParkDecks = value.toInt();
-      });
     }
 
     // Logic to proceed after a successful API call
