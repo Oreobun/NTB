@@ -142,24 +142,27 @@ class _HomePageState extends State<SearchMap> {
   @override
   void initState()  {
     test = [];
+    print("test1");
     slotDistance();
     carparkController.fetchNotes(sortResult).then((value) {
       setState(() {
+        print("test2");
         _notes.addAll(value);
+        print("test3");
+        Timer(Duration(seconds: 2), () {
+          print("test4");
         for (var i in _notes) {
           Future<double> distanceInMeters = Geolocator().distanceBetween(source.latitude, source.longitude, i.lat, i.lng);
           distanceInMeters.then((result){
             i.carParkDecks = result.toInt();
           });
         }
-
+          print("test5");
+        });
         _notesForDisplay = _notes;
       });
     });
-
-
     super.initState();
-
   }
 
   @override
@@ -238,6 +241,7 @@ class _HomePageState extends State<SearchMap> {
   }
 
   _listItem(index) {
+    print("final test");
     print(test.length);
     return (test.contains(_notesForDisplay[index].iId) == false) ?
      new Card(
