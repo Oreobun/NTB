@@ -22,12 +22,22 @@ class CarparkController {
     var response = await http.get(url);
 
 //    String data = await rootBundle.loadString('assets/carpark_data.json');
-    var jsonResult = json.decode(response.body);
-    for (int i = 0; i < jsonResult.length; i++) {
-      var result = CarparkInfo.fromJson(jsonResult[i]);
-      notes.add(result);
-    }
 
+    if (response.statusCode == 200) {
+      var jsonResult = json.decode(response.body);
+      for (int i = 0; i < jsonResult.length; i++) {
+        var result = CarparkInfo.fromJson(jsonResult[i]);
+        notes.add(result);
+      }
+    }
+    else {
+      String data = await rootBundle.loadString('assets/carpark_data.json');
+      var test = json.decode(data);
+      for (int i = 0; i < test.length; i++) {
+        var result = CarparkInfo.fromJson(test[i]);
+        notes.add(result);
+      }
+    }
     // Logic to proceed after a successful API call
 //    if (response.statusCode == 200) {
 //      var notesJson = json.decode(response.body);

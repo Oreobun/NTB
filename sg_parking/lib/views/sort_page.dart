@@ -32,11 +32,11 @@ class _SortState extends State<Sort> {
       Comparator<CarparkInfo> lotsComparator0 = (a,b) => (a.carParkDecks).compareTo((b.carParkDecks));
       test.sort(lotsComparator0);
     }else if (index == 1){
-      Comparator<CarparkInfo> lotsComparator1 = (a,b) => (a.availableLots).compareTo((b.availableLots));
+      Comparator<CarparkInfo> lotsComparator1 = (a,b) => (b.availableLots).compareTo((a.availableLots));
       test.sort(lotsComparator1);
     }
     else if (index == 2){
-      Comparator<CarparkInfo> lotsComparator2 = (a,b) => a.gantryHeight.compareTo((b.gantryHeight));
+      Comparator<CarparkInfo> lotsComparator2 = (a,b) => b.gantryHeight.compareTo((a.gantryHeight));
       test.sort(lotsComparator2);
     }
     _notes2 = test;
