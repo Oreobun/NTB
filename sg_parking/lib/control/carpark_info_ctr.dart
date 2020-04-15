@@ -7,6 +7,7 @@ and also allows for optional sorting by available lots and address.
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sgparking/entity/carpark.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,8 @@ class CarparkController {
   var notes = List<CarparkInfo>();
 
   Future<List<CarparkInfo>> fetchNotes(int sortNum) async {
+    Position locationUpdate = await Geolocator()  //constructing geolocator object to call current position
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     // Sets up an API call to AWS Elastic Beanstalk
     var url = 'http://noturningbac-env.eba-qa2gpmhs.ap-southeast-1.elasticbeanstalk.com/api/get_carparks_info';
     var response = await http.get(url);
@@ -50,7 +53,14 @@ class CarparkController {
 //      print(notes.length);
 //      Comparator<CarparkInfo> lotsComparator = (a,b) => int.parse(a.totalLots).compareTo(int.parse(b.totalLots));
 //      notes.sort(lotsComparator);
-
+    LatLng source = LatLng(locationUpdate.latitude, locationUpdate.longitude);
+    for (var i in notes) {
+      Future<double> distanceInMeters = Geolocator().distanceBetween(source.latitude, source.longitude, i.lat, i.lng);
+      distanceInMeters.then((result){
+        i.carParkDecks = result.toInt();
+        print(result.toInt());
+      });
+    }
 
 //    }
     return notes;

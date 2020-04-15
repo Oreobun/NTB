@@ -134,34 +134,42 @@ class _HomePageState extends State<SearchMap> {
     Position locationUpdate = await Geolocator()  //constructing geolocator object to call current position
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
+
       source = LatLng(locationUpdate.latitude, locationUpdate.longitude);
+      print("finish waiting");
+      print(source);
     });
 
   }
 
   @override
   void initState()  {
+    slotDistance();
     test = [];
     print("test1");
-    slotDistance();
+    print("check source");
+    print(source);
     carparkController.fetchNotes(sortResult).then((value) {
       setState(() {
         print("test2");
         _notes.addAll(value);
         print("test3");
-        Timer(Duration(seconds: 2), () {
-          print("test4");
-        for (var i in _notes) {
-          Future<double> distanceInMeters = Geolocator().distanceBetween(source.latitude, source.longitude, i.lat, i.lng);
-          distanceInMeters.then((result){
-            i.carParkDecks = result.toInt();
-          });
-        }
-          print("test5");
-        });
-        _notesForDisplay = _notes;
+//        Timer(Duration(seconds: 1), () {
+//          print("test4");
+//
+////        for (var i in _notes) {
+////          Future<double> distanceInMeters = Geolocator().distanceBetween(source.latitude, source.longitude, i.lat, i.lng);
+////          distanceInMeters.then((result){
+////            i.carParkDecks = result.toInt();
+////            print(result.toInt());
+////          });
+////        }
+//
+//          print("test5");
+//        });
       });
     });
+      _notesForDisplay = _notes;
     super.initState();
   }
 
@@ -241,8 +249,6 @@ class _HomePageState extends State<SearchMap> {
   }
 
   _listItem(index) {
-    print("final test");
-    print(test.length);
     return (test.contains(_notesForDisplay[index].iId) == false) ?
      new Card(
       child: Padding(

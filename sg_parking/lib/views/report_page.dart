@@ -22,6 +22,7 @@ class Report extends StatelessWidget {
 
         ),
         body: MyCustomForm(),
+        resizeToAvoidBottomPadding: false,
       );
   }
 }
@@ -61,124 +62,127 @@ class MyCustomFormState extends State<MyCustomForm> {
     // Build a Form widget using the _formKey created above.
     return Form(
         key: _formKey,
-        child: Container(
-          margin: EdgeInsets.only(top: 20, bottom: 20),
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                  height: 10
-              ),
-              Text(
-                'Please further describe in detail opf the carpark of which you would like to report',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontSize: 16,
-                    color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                  height: 20
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                    'Name',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18)
+        child: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.only(top: 20, bottom: 20),
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                    height: 10
                 ),
-              ),
-              TextFormField(
-                controller: myController3,
-                decoration: InputDecoration(
-                    hintText: "Enter Name..",
+                Text(
+                  'Please further describe in detail opf the carpark of which you would like to report',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 16,
+                      color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                    height: 20
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                      'Name',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18)
+                  ),
+                ),
+                TextFormField(
+                  controller: myController3,
+                  decoration: InputDecoration(
+                      hintText: "Enter Name..",
+                      hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
+                      hasFloatingPlaceholder: true,
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please fill in your name';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                    height: 20
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                      'Subject',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18)
+                  ),
+                ),
+                TextFormField(
+                  controller: myController,
+                  maxLength: 100,
+                  maxLines: 2,
+                  textAlign: TextAlign.left,
+                  decoration: InputDecoration(
+                    hintText: "Enter a Subject..",
                     hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
                     hasFloatingPlaceholder: true,
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please fill in your name';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                  height: 20
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                    'Subject',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18)
-                ),
-              ),
-              TextFormField(
-                controller: myController,
-                maxLength: 100,
-                maxLines: 2,
-                textAlign: TextAlign.left,
-                decoration: InputDecoration(
-                  hintText: "Enter a Subject..",
-                  hintStyle: TextStyle(fontStyle: FontStyle.italic, fontSize:  15),
-                  hasFloatingPlaceholder: true,
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please fill in the subject';
-                  }
-                  return null;
-                },
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                    'Description',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18)
-                ),
-              ),
-              TextFormField(
-                controller: myController2,
-                maxLength: 200,
-                maxLines: null,
-                minLines: 3,
-                textAlign: TextAlign.left,
-                decoration: InputDecoration(
-                  hintText: "Tell us more..",
-                  hintStyle: TextStyle(
-                      fontStyle: FontStyle.italic, fontSize: 15),
-                  hasFloatingPlaceholder: true,
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please fill in the description';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                  height: 20
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: FlatButton(
-                    child: Text("Send"),
-                    color: Color(0xFF4B9DFE),
-                    textColor: Colors.white,
-                    padding: EdgeInsets.only(
-                        left: 20, right: 20, top: 15, bottom: 15),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    onPressed: () {
-                      sendClicked();
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please fill in the subject';
                     }
+                    return null;
+                  },
                 ),
-              )
-            ],
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                      'Description',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18)
+                  ),
+                ),
+                TextFormField(
+                  controller: myController2,
+                  maxLength: 200,
+                  maxLines: null,
+                  minLines: 3,
+                  textAlign: TextAlign.left,
+                  decoration: InputDecoration(
+                    hintText: "Tell us more..",
+                    hintStyle: TextStyle(
+                        fontStyle: FontStyle.italic, fontSize: 15),
+                    hasFloatingPlaceholder: true,
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please fill in the description';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                    height: 20
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: FlatButton(
+                      child: Text("Send"),
+                      color: Color(0xFF4B9DFE),
+                      textColor: Colors.white,
+                      padding: EdgeInsets.only(
+                          left: 20, right: 20, top: 15, bottom: 15),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      onPressed: () {
+                        sendClicked();
+                      }
+                  ),
+                )
+              ],
+            ),
           ),
-        )
+        ),
+
     );
   }
   void sendClicked(){
